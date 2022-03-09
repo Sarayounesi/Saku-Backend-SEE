@@ -1,2 +1,6 @@
 django==4.0.3
+djangorestframework==3.13.1
+markdown==3.3.6
+django-filter==21.1
+drf-yasg==1.20.0
 coverage==6.3.2
