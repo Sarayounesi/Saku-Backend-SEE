@@ -7,3 +7,7 @@ PyJWT==2.3.0
 pytz==2021.3
 sqlparse==0.4.2
 tzdata==2021.5
+markdown==3.3.6
+django-filter==21.1
+drf-yasg==1.20.0
+coverage==6.3.2
