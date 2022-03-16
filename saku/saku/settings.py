@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/4.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
-
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-fhk79x(^a9w%v!zm!6%iho2(^rv&q8s^x!cm)(3q*gsl^r7^@=
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'drf_yasg',
     'auction.apps.AuctionConfig',
-    'account'
+    'account',
 ]
 
 MIDDLEWARE = [
@@ -78,11 +78,31 @@ WSGI_APPLICATION = 'saku.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.sqlite3',
+    #     'NAME': BASE_DIR / 'db.sqlite3',
+    # }
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'saku-db',
+        'USER': 'postgres',
+        'PASSWORD': 'saku1234',
+        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PORT': '5432',
     }
 }
+
+if os.environ.get('GITHUB_WORKFLOW'):
+    DATABASES = {
+        'default': {
+           'ENGINE': 'django.db.backends.postgresql_psycopg2',
+           'NAME': 'github_actions',
+           'USER': 'postgres',
+           'PASSWORD': 'postgres',
+           'HOST': 'localhost',
+           'PORT': '5432',
+        }
+    }
 
 
 # Password validation
