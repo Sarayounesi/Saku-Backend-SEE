@@ -1,9 +1,8 @@
-from django.test import TestCase
+import json
 from rest_framework.test import APIClient
 from rest_framework import status
 from django.urls import reverse
 from django.contrib.auth.models import User
-import json
 
 
 class AccountTest(TestCase):
@@ -13,7 +12,6 @@ class AccountTest(TestCase):
         self.user = User.objects.create_user(username='test_user', password='Ab654321')
         self.user.is_active = True
         self.user.save()
-
 
     def test_register(self):
         url = reverse("account:register")
@@ -26,7 +24,6 @@ class AccountTest(TestCase):
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-
     def test_login(self):
         url = reverse('account:login')
 
@@ -34,7 +31,6 @@ class AccountTest(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue('refresh' in response.data)
         self.assertTrue('access' in response.data)
-
 
     def test_change_password(self):
         self.client.force_authenticate(self.user)
@@ -51,7 +47,6 @@ class AccountTest(TestCase):
         response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)  
 
-
     def test_forgot_password(self):
         url = reverse("account:forgot_password")
         data =  {"username" : "test_user"} 
@@ -64,4 +59,3 @@ class AccountTest(TestCase):
 
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)  
-
