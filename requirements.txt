@@ -11,3 +11,4 @@ markdown==3.3.6
 django-filter==21.1
 drf-yasg==1.20.0
 coverage==6.3.2
+django_cors_headers==3.11.0
