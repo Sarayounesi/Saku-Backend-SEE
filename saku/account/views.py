@@ -56,11 +56,7 @@ class ForgotPassword(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = User.objects.get(username=serializer.validated_data['username'])
-            new_password = User.objects.make_random_password()
-            user.set_password(new_password)
-            #delete line below for production
-            # user.email = "shahrzad123azari@gmail.com"
-            user.save()
+            
             try:
                 validate_email(user.email)
             except ValidationError:
@@ -71,7 +67,10 @@ class ForgotPassword(generics.GenericAPIView):
                     'data': []
                 }
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-                
+            
+            new_password = User.objects.make_random_password()
+            user.set_password(new_password)
+            user.save()
             send_mail('New Password', f'Hi {user.username}!\nYour new password is: {new_password}', EMAIL_HOST_USER,
                     recipient_list=[user.email], fail_silently=False)
             response = {
