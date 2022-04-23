@@ -2,6 +2,26 @@ from django.contrib.auth.models import User
 from django.db import models
 
 
+class Category(models.Model):
+    class Meta:
+        db_table = "saku_category"
+
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
+class Tags(models.Model):
+    class Meta:
+        db_table = "saku_Tags"
+
+    name = models.CharField(max_length=20)
+
+    def __str__(self):
+        return self.name
+
+
 class Auction(models.Model):
     class Meta:
         db_table = "saku_auction"
@@ -18,6 +38,8 @@ class Auction(models.Model):
     mode = models.IntegerField(choices=Mode.choices, default=Mode.INCREASING)
     limit = models.IntegerField(default=0)
     is_private = models.BooleanField(default=False)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    tags = models.ManyToManyField(Tags)
 
     def __str__(self):
         return self.name
