@@ -2,7 +2,7 @@ from django.test import Client
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
-from auction.models import Auction
+from auction.models import Auction, Tags, Category
 
 
 # Create your tests here.
@@ -11,13 +11,18 @@ class CreateAuctionTest(APITestCase):
     def setUp(self) -> None:
         self.client = Client()
         User.objects.create(id=1, username="Mehdi")
+        Category.objects.create(id=1, name="Category")
+        Tags.objects.create(id=1, name="T1")
+        Tags.objects.create(id=2, name="T2")
         self.request_data = {"created_at": "2019-08-24T14:15:22Z",
                              "name": "string",
                              "finished_at": "2019-08-24T14:15:22Z",
                              "mode": 1,
                              "limit": 0,
                              "is_private": True,
-                             "user": 0}
+                             "user": 0,
+                             "category": 1,
+                             "tags": [1, 2]}
 
     def test_not_found_user(self):
         response = self.client.post(path='/auction/', data=self.request_data)
