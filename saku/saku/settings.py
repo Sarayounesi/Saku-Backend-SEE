@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'auction.apps.AuctionConfig',
     'account',
+    'user_profile',
 ]
 
 MIDDLEWARE = [
