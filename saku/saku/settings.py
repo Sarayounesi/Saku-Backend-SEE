@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'auction.apps.AuctionConfig',
     'account',
     'user_profile',
+    'bid',
 ]
 
 MIDDLEWARE = [
