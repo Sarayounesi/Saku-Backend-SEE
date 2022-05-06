@@ -1,7 +1,8 @@
+import logging
 import random
 import string
 from rest_framework import serializers
-from auction.models import Auction
+from auction.models import Auction, Tags
 
 
 def get_random_token():
@@ -9,6 +10,8 @@ def get_random_token():
 
 
 class CreateAuctionRequestSerializer(serializers.ModelSerializer):
+    tags = serializers.ListSerializer(child=serializers.CharField())
+
     class Meta:
         model = Auction
         exclude = ('token',)
@@ -20,6 +23,11 @@ class CreateAuctionRequestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         token = get_random_token()
+        tag_names = validated_data.pop('tags')
+        tags = []
+        for tag in tag_names:
+            tag_instance, _ = Tags.objects.get_or_create(name=tag)
+            tags.append(tag_instance)
         while Auction.objects.filter(token=token).exists():
             token = get_random_token()
         validated_data['token'] = token
