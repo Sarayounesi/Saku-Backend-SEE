@@ -9,11 +9,12 @@ from auction.models import Auction
 from bid.serializers import BidSerializer
 from bid.models import Bid
 
-#TODO: add search and filter
 
 class ListCreateAuctionBid(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
     serializer_class = BidSerializer
+    filterset_fields = ('user', 'auction')
+    ordering_fields = ('time', 'price')
 
     def post(self, request, token):
         auction = get_object_or_404(Auction, token=token)
@@ -29,8 +30,10 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
 
 
 class UserBidsView(generics.ListAPIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = (IsAuthenticated,)
     serializer_class = BidSerializer
+    filterset_fields = ('auction',)
+    ordering_fields = ('time', 'price')
 
     def get_queryset(self):
         user = self.request.user
