@@ -1,7 +1,4 @@
 from django.shortcuts import render
-from .serializers import (RegisterSerializer, 
-                            ChangePasswordSerializer,
-                            ForgotPasswordSerializer)
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
@@ -9,8 +6,12 @@ from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
-from saku.settings import EMAIL_HOST_USER
 
+from saku.settings import EMAIL_HOST_USER
+from user_profile.models import Profile
+from .serializers import (RegisterSerializer, 
+                            ChangePasswordSerializer,
+                            ForgotPasswordSerializer)
 
 
 class Register(generics.CreateAPIView):
@@ -55,23 +56,25 @@ class ForgotPassword(generics.GenericAPIView):
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
-            user = User.objects.get(username=serializer.validated_data['username'])
-            new_password = User.objects.make_random_password()
-            user.set_password(new_password)
-            #delete line below for production
-            # user.email = "shahrzad123azari@gmail.com"
-            user.save()
+            # user = User.objects.get(username=serializer.validated_data['username'])
+            
             try:
-                validate_email(user.email)
-            except ValidationError:
+                # validate_email(user.email)
+                profile = Profile.objects.get(email=serializer.validated_data['email'])
+                user = profile.user
+            except:
                 response = {
                     'status': 'error',
                     'code': status.HTTP_400_BAD_REQUEST,
-                    'message': 'There is no valid email for this username.',
+                    # 'message': 'There is no valid email for this username.',
+                    'message': 'There is no registered user for this eamil.',
                     'data': []
                 }
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-                
+            
+            new_password = User.objects.make_random_password()
+            user.set_password(new_password)
+            user.save()
             send_mail('New Password', f'Hi {user.username}!\nYour new password is: {new_password}', EMAIL_HOST_USER,
                     recipient_list=[user.email], fail_silently=False)
             response = {
