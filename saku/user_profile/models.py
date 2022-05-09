@@ -15,7 +15,7 @@ class Profile(models.Model):
     # national_id = models.IntegerField(validators=[MinValueValidator(1000000000), MaxValueValidator(9999999999)])
     national_id = models.CharField(validators=[national_id_validator], max_length=10, blank=True)
     phone = models.CharField(validators=[phone_validator], max_length=11, blank=True)
-    email = models.EmailField(blank=True, null=True)
+    email = models.EmailField(blank=True, null=True, unique=True)
     city = models.CharField(max_length=20, blank=True)
     province = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=50, blank=True)

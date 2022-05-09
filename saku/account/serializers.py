@@ -38,8 +38,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class ForgotPasswordSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True)
+    # username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ['username']
+        # fields = ['username']
+        fields = ['email']
