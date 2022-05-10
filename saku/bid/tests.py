@@ -26,9 +26,9 @@ class BidTest(TestCase):
         self.user2.save()
 
         #create auction
-        category = Category.objects.create(id=1, name="Category")
-        tag1 = Tags.objects.create(id=1, name="T1")
-        tag2 = Tags.objects.create(id=2, name="T2")
+        category = Category.objects.create(name="Category")
+        tag1 = Tags.objects.create(name="T1")
+        tag2 = Tags.objects.create(name="T2")
         self.auction = Auction.objects.create(created_at="2019-08-24T14:15:22Z",
                              token="Map5qjBe",
                              name="string",
