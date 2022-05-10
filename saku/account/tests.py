@@ -1,9 +1,12 @@
 import json
-from django.test import TestCase
+
 from rest_framework.test import APIClient
 from rest_framework import status
+from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+
+from user_profile.models import Profile
 
 
 class AccountTest(TestCase):
@@ -50,13 +53,12 @@ class AccountTest(TestCase):
 
     def test_forgot_password(self):
         url = reverse("account:forgot_password")
-        data =  {"username" : "test_user"} 
+        data =  {"email" : "shahrzad123azari@gmail.com"} 
 
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)  
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
-        self.user.email = "shahrzad123azari@gmail.com"
-        self.user.save()
+        Profile.objects.create(user=self.user, email="shahrzad123azari@gmail.com")
 
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)  
