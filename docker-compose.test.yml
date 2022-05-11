@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12-alpine3.15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=saku-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=saku1234
+    ports:
+      - "5432:5432"
+
+  web:
+    image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
+    command: /bin/sh -c "cd saku && sleep 10 && python manage.py test"
+    volumes:
+      - .:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  postgres_data:
