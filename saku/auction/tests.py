@@ -21,8 +21,8 @@ class CreateAuctionTest(APITestCase):
                              "limit": 0,
                              "is_private": True,
                              "user": 0,
-                             "category": 1,
-                             "tags": [1, 2]}
+                             "category": "C1",
+                             "tags": ["T1", "T2"]}
 
     def test_not_found_user(self):
         response = self.client.post(path='/auction/', data=self.request_data)
