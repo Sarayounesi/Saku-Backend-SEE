@@ -4,23 +4,21 @@ services:
   db:
     image: postgres:12-alpine3.15
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     environment:
       - POSTGRES_DB=saku-db
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=saku1234
     ports:
-      - "5432:5432"
+      - "15432:5432"
 
   web:
     build: .
+    tty: true
     command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
-    expose:
-      - "8000"
+    ports:
+      - "8000:8000"
     depends_on:
       - db
-
-volumes:
-  postgres_data:
