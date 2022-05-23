@@ -1,3 +1,4 @@
+import os
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -16,8 +17,9 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         profile = Profile.objects.filter(user = self.request.user)
         if len(profile) != 0:
             queryset = profile[0]
+            new_profile_image = self.request.data.get('profile_image')
+            if new_profile_image:
+                os.remove(queryset.profile_image.path)
         else:
             queryset = Profile.objects.create(user=self.request.user, national_id='0', email='')
         return queryset
-
-    
