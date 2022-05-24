@@ -17,3 +17,8 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         user.save()
         profile = Profile.objects.filter(user=user)[0]
         return profile    
+
+    def get_serializer_context(self):
+        context = super(UpdateProfile, self).get_serializer_context()
+        context.update({"user": self.request.user})
+        return context

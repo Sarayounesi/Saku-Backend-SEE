@@ -16,6 +16,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("There is another account with this email")
         return email
 
+
     def create(self, validated_data):
         # create user account
         user = User.objects.create(username=validated_data['username'], email=validated_data['email'])
