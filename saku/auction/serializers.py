@@ -38,4 +38,4 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Auction
-        exclude = ('id',)
+        fields = '__all__'
