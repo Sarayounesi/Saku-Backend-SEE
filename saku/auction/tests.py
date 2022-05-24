@@ -47,3 +47,48 @@ class CreateAuctionTest(APITestCase):
         print(response.data)
         self.assertEqual(201, response.status_code)
         self.assertEqual(auctions_count + 1, Auction.objects.count())
+
+
+class GetAuctionTest(APITestCase):
+
+    def setUp(self) -> None:
+        self.client = Client()
+        user = User.objects.create(id=1, username="Mehdi")
+        category = Category.objects.create(id=1, name="Category")
+        tags = [Tags.objects.create(id=1, name="T1"), Tags.objects.create(id=2, name="T2")]
+        Auction.objects.create(**{"created_at": "2019-08-24T14:15:22Z",
+                                  "name": "auction1",
+                                  "finished_at": "2019-08-24T14:15:22Z",
+                                  "mode": 1,
+                                  "limit": 0,
+                                  "is_private": False,
+                                  "user": user,
+                                  "token": "qwertyui",
+                                  "category": category}).tags.set(tags)
+        Auction.objects.create(**{"created_at": "2020-08-24T14:15:22Z",
+                                  "name": "auction2",
+                                  "finished_at": "2022-08-24T14:15:22Z",
+                                  "mode": 1,
+                                  "limit": 0,
+                                  "is_private": False,
+                                  "user": user,
+                                  "token": "asdfghjk",
+                                  "category": category}).tags.set(tags)
+
+    def test_get_auction_list(self):
+        response = self.client.get(path='/auction/')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(2, len(response.data))
+        self.assertEqual('auction1', response.data[0]['name'])
+
+    def test_get_detailed_auction(self):
+        response = self.client.get(path='/auction/qwertyui')
+        self.assertEqual(200, response.status_code)
+        auction = Auction.objects.get(token='qwertyui')
+        self.assertEqual(auction.name, response.data['name'])
+
+    def test_not_found_auction(self):
+        response = self.client.get(path='/auction/notfound')
+        self.assertEqual(404, response.status_code)
+        self.assertIn(ErrorDetail(string="Not found.", code='not_found'),
+                      response.data["detail"])
