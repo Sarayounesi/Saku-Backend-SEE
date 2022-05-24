@@ -1,3 +1,4 @@
+import random
 from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -13,8 +14,23 @@ from .serializers import (RegisterSerializer,
                             ChangePasswordSerializer,
                             ForgotPasswordSerializer)
 
+#send_email is slow!
+class Register(generics.GenericAPIView):
+    permission_classes = (AllowAny,)
+    serializer_class = RegisterSerializer
 
-class Register(generics.CreateAPIView):
+    def post(self, request,*args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        username = serializer.data.get('username')
+        email = serializer.data.get('email')
+        randomcode = random.randrange(1000, 9999)
+        send_mail('Verify Email', f'Hi {username}!\nYour verification code is: {randomcode}',
+                EMAIL_HOST_USER, recipient_list=[email], fail_silently=False)
+        return Response({'code':randomcode}, status=status.HTTP_200_OK)
+
+
+class CompeleteRegisteration(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
@@ -25,7 +41,6 @@ class Register(generics.CreateAPIView):
         user.is_active = True
         user.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-
 
 
 class ChangePassword(generics.UpdateAPIView):
@@ -48,7 +63,6 @@ class ChangePassword(generics.UpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-
 class ForgotPassword(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = ForgotPasswordSerializer
@@ -57,7 +71,6 @@ class ForgotPassword(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             # user = User.objects.get(username=serializer.validated_data['username'])
-            
             try:
                 # validate_email(user.email)
                 profile = Profile.objects.get(email=serializer.validated_data['email'])
