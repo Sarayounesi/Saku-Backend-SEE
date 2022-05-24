@@ -86,8 +86,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'saku-db',
         'USER': 'postgres',
-        'PASSWORD': 'shah1234',
-        'HOST': os.getenv('DB_HOST', 'localhost'),
+        'PASSWORD': 'saku1234',
+        'HOST': os.getenv('DB_HOST', 'db'),
         'PORT': '5432',
     }
 }
