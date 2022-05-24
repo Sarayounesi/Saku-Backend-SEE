@@ -1,4 +1,3 @@
-
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -42,7 +41,7 @@ class Auction(models.Model):
     description = models.CharField(max_length=200, blank=True)
     is_private = models.BooleanField(default=False)
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
-    tags = models.ManyToManyField(Tags)
+    tags = models.ManyToManyField(Tags, blank=True)
     participants_num = models.IntegerField(default=0)
     show_best_bid = models.BooleanField(default=False)
 
