@@ -13,6 +13,7 @@ class CreateAuctionTest(APITestCase):
         self.user = User.objects.create(id=1, username="Mehdi")
         self.client.force_authenticate(self.user)
         Category.objects.create(name="C1")
+        Tags.objects.create(name="T1")
         self.request_data = {"created_at": "2019-08-24T14:15:22Z",
                              "name": "string",
                              "finished_at": "2019-08-24T14:15:22Z",
@@ -21,7 +22,7 @@ class CreateAuctionTest(APITestCase):
                              "is_private": True,
                              "user": 0,
                              "category": "C1",
-                             "tags": ["T1","T2"]}
+                             "tags": ["T1"]}
 
     def test_not_found_user(self):
         response = self.client.post(path='/auction/', data=self.request_data)
