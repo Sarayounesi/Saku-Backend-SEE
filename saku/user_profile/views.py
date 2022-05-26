@@ -18,9 +18,9 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         user.save()
         profile = Profile.objects.filter(user=user)[0]
         new_profile_image = self.request.data.get('profile_image')
-            if new_profile_image:
-                os.remove(profile.profile_image.path)
-        return profile    
+        if new_profile_image:
+            os.remove(profile.profile_image.path)
+        return profile
 
     def get_serializer_context(self):
         context = super(UpdateProfile, self).get_serializer_context()
