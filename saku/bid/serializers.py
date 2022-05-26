@@ -11,6 +11,9 @@ class BidSerializer(serializers.ModelSerializer):
     class Meta:
         model = Bid
         exclude = ('id',)
+        extra_kwargs = {
+            "price": {"required": True}
+        }
 
     def validate(self, data):
         user = data.get('user')

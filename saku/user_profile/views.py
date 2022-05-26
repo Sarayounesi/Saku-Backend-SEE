@@ -1,3 +1,4 @@
+import os
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
@@ -12,12 +13,16 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
     def get_object(self):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
+        user = self.request.user
+        user.email = serializer.data.get('email')
+        user.save()
+        profile = Profile.objects.filter(user=user)[0]
+        new_profile_image = self.request.data.get('profile_image')
+        if new_profile_image:
+            os.remove(profile.profile_image.path)
+        return profile
 
-        profile = Profile.objects.filter(user = self.request.user)
-        if len(profile) != 0:
-            queryset = profile[0]
-        else:
-            queryset = Profile.objects.create(user=self.request.user, national_id='0', email='')
-        return queryset
-
-    
+    def get_serializer_context(self):
+        context = super(UpdateProfile, self).get_serializer_context()
+        context.update({"user": self.request.user})
+        return context

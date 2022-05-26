@@ -163,6 +163,11 @@ USE_I18N = True
 USE_TZ = True
 
 
+# media files (uploaded by users)
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = '/media/'
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
@@ -179,4 +184,4 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
 EMAIL_HOST_USER = "saku.project.app@gmail.com"
-EMAIL_HOST_PASSWORD = "saku1234"
+EMAIL_HOST_PASSWORD = "jnuzfnsrbbaqsjhl"
