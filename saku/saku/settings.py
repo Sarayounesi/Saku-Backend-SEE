@@ -37,11 +37,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'django_filters',
     'drf_yasg',
     'corsheaders',
     'auction.apps.AuctionConfig',
     'account',
     'user_profile',
+    'bid',
 ]
 
 MIDDLEWARE = [
@@ -130,6 +132,9 @@ REST_FRAMEWORK = {
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ],
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
     ]
 }
 
@@ -157,6 +162,11 @@ USE_I18N = True
 
 USE_TZ = True
 
+
+# media files (uploaded by users)
+
+MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_URL = '/media/'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/

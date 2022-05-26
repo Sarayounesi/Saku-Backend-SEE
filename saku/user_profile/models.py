@@ -1,9 +1,18 @@
+import os, random
+
 from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import RegexValidator, MinValueValidator, MaxValueValidator
 
 phone_validator = RegexValidator(regex=r'^09\d{9}$', message="Phone number is invalid (.eg '09123456789')")
 national_id_validator = RegexValidator(regex=r'^\d{10}$', message="natinal id is invalid (.eg '1111111111')")
+
+def photo_path(instance, filename):
+    basefilename, file_extension= os.path.splitext(filename)
+    chars= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
+    randomstr= ''.join((random.choice(chars)) for x in range(10))
+    return 'images/profile_images/{basename}{randomstring}{ext}'.format(
+        userid= instance.user.id, basename=basefilename, randomstring=randomstr, ext=file_extension)
 
 
 class Profile(models.Model):
@@ -19,7 +28,7 @@ class Profile(models.Model):
     city = models.CharField(max_length=20, blank=True)
     province = models.CharField(max_length=20, blank=True)
     address = models.CharField(max_length=50, blank=True)
-    # picture = 
+    profile_image = models.ImageField(upload_to=photo_path, null=True, blank=True)
 
     def __str__(self):
         return self.name
