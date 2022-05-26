@@ -2,7 +2,7 @@ version: "3"
 
 services:
   db:
-    image: postgres:12-alpine3.15
+    image: m.docker-registry.ir/postgres:12-alpine3.15
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     environment:

@@ -1,18 +1,28 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
+from user_profile.models import Profile
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ["username", "password"]
+        fields = ["username", "password", "email"]
         extra_kwargs = {
             "password": {"write_only": True, "min_length": 8},
         }
 
+    def validate_email(self, email):
+        if (User.objects.filter(email=email)):
+            raise serializers.ValidationError("There is another account with this email")
+        return email
+
+
     def create(self, validated_data):
-        user = User.objects.create(username=validated_data['username'])
+        # create user account
+        user = User.objects.create(username=validated_data['username'], email=validated_data['email'])
         user.set_password(validated_data['password'])
+        # create user profile
+        Profile.objects.create(user=user, national_id='0', email=user.email)
         return user
 
 
@@ -38,8 +48,10 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
 
 class ForgotPasswordSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=True)
+    # username = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
 
     class Meta:
         model = User
-        fields = ['username']
+        # fields = ['username']
+        fields = ['email']

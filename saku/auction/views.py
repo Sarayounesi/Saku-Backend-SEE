@@ -3,12 +3,12 @@ from rest_framework import generics
 from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer
 from rest_framework.response import Response
 from saku.serializers import GeneralCreateResponseSerializer, GeneralErrorResponseSerializer
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from auction.models import Auction
 
 
 class CreateListAuction(generics.ListCreateAPIView):
-    permission_classes = (AllowAny,)  # TODO: change to IsAuthorized after auth has merged.
+    permission_classes = (IsAuthenticated,)
     queryset = Auction.objects.order_by('finished_at')
 
     @swagger_auto_schema(
@@ -42,13 +42,10 @@ class CreateListAuction(generics.ListCreateAPIView):
 
 
 class DetailedAuction(generics.RetrieveAPIView):
-    permission_classes = (AllowAny,)
+    permission_classes = (IsAuthenticated,)
     queryset = Auction.objects.all()
     serializer_class = GetAuctionRequestSerializer
     lookup_field = 'token'
 
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
-
-
-
