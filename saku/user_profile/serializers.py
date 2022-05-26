@@ -11,12 +11,13 @@ class ProfileSerializer(serializers.ModelSerializer):
             "user": {"read_only": True}
         }
 
-    def validate(self, data):
-        email = data.get('email')
-        if email:
-            if len(Profile.objects.filter(email=email))>0:
-                raise serializers.ValidationError("Another user exists with this email address.")
-        return data
+
+    def validate_email(self, email):
+        user = self.context.get('user')
+        if user.email != email and len(Profile.objects.filter(email=email))>0:
+            raise serializers.ValidationError("Another user exists with this email address.")
+        return email
+
 
 #TODO: uncomment when profile merged
 class GeneralProfileSerializer(serializers.ModelSerializer):

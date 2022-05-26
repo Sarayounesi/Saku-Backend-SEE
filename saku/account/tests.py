@@ -22,7 +22,7 @@ class AccountTest(TestCase):
 
         data =  {"username" : "test_user1", "password" : "Ab654321"} 
         response = self.client.post(url, data, format="json")
-        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         data =  {"username" : "test_user2", "password" : "4321"}
         response = self.client.post(url, data, format="json")
