@@ -51,5 +51,6 @@ jobs:
     - name: Run Tests
       run: |
         docker login --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.PAT }} ghcr.io
-        docker pull ghcr.io/mehdi-mostafavi/saku:${{ github.sha }}
+        export TAG=${{ github.sha }}
+        docker pull ghcr.io/mehdi-mostafavi/saku:$TAG
         docker-compose -f docker-compose.test.yml run web
