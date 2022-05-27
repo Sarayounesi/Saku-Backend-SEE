@@ -1,9 +1,9 @@
 import random
 import string
 from rest_framework import serializers
-from auction.models import Auction, Tags
 from user_profile.serializers import GeneralProfileSerializer
 from bid.models import Bid
+from auction.models import Auction, Tags, Category
 
 
 def get_random_token():
@@ -43,7 +43,9 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Auction
-        fields = '__all__'
+        fields = ('name', 'token', 'user', 'created_at', 'finished_at',
+                  'mode', 'limit', 'location', 'description', 'is_private',
+                  'category', 'tags', 'participants_num', 'show_best_bid', 'best_bid')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -63,6 +65,12 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
             user_data = GeneralProfileSerializer(best_bid.user, context={'request':self.context.get('request')}).data
             return {"user":user_data, "time":best_bid.time, "price":best_bid.price}
         return {}
+
+
+class GetCategoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = '__all__'
 
 
 class UpdateAuctionRequestSerializer(serializers.ModelSerializer):

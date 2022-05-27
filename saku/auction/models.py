@@ -3,8 +3,6 @@ from django.db import models
 
 
 class Category(models.Model):
-    class Meta:
-        db_table = "saku_category"
 
     name = models.CharField(max_length=20, primary_key=True)
 
@@ -13,8 +11,6 @@ class Category(models.Model):
 
 
 class Tags(models.Model):
-    class Meta:
-        db_table = "saku_Tags"
 
     name = models.CharField(max_length=20, primary_key=True)
 
@@ -23,8 +19,6 @@ class Tags(models.Model):
 
 
 class Auction(models.Model):
-    class Meta:
-        db_table = "saku_auction"
 
     class Mode(models.IntegerChoices):
         INCREASING = 1
