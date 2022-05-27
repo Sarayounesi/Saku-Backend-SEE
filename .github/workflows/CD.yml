@@ -17,4 +17,4 @@ jobs:
       - name: Deploy
         shell: bash
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ github.sha }} && git checkout Feature/Create_docker_image && git fetch --all && git reset --hard origin/Feature/Create_docker_image && docker-compose down && docker-compose -f docker-compose.deploy.yml up -d"
+          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ github.sha }} && docker-compose down && docker-compose -f docker-compose.deploy.yml up -d"
