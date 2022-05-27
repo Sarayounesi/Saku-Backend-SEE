@@ -47,6 +47,11 @@ class CreateAuctionTest(APITestCase):
         self.assertEqual(201, response.status_code)
         self.assertEqual(auctions_count + 1, Auction.objects.count())
 
+    def test_get_category_list(self):
+        response = self.client.get(path='/auction/categories/')
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(1, len(response.data[0]))
+
 
 class GetAuctionTest(APITestCase):
 
@@ -74,7 +79,7 @@ class GetAuctionTest(APITestCase):
                                   "user": self.user,
                                   "token": "asdfghjk",
                                   "category": category}).tags.set(tags)
-        
+
 
     def test_get_auction_list(self):
         response = self.client.get(path='/auction/')
@@ -93,6 +98,7 @@ class GetAuctionTest(APITestCase):
         self.assertEqual(404, response.status_code)
         self.assertIn(ErrorDetail(string="Not found.", code='not_found'),
                       response.data["detail"])
+
 
 
 
