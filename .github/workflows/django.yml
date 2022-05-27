@@ -78,4 +78,4 @@ jobs:
         shell: bash
         run: |
           export TAG=3.9_02e15816f677081515d46fa4fed5a84badda602a
-          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=$TAG && git checkout Feature/Create_docker_image && git pull && pip install pillow && docker-compose -f docker-compose.deploy.yml up -d"
+          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=$TAG && git checkout Feature/Create_docker_image && git fetch --all && git reset --hard Origin/Feature/Create_docker_image && docker-compose down && docker-compose -f docker-compose.deploy.yml up -d"
