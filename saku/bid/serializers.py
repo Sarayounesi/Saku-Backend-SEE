@@ -2,12 +2,9 @@ from django.db.models import Max
 from rest_framework import serializers
 from auction.models import Auction
 from bid.models import Bid
-# from user_profile.serializers import GeneralProfileSerializer
 
 
 class BidSerializer(serializers.ModelSerializer):
-    # user = GeneralProfileSerializer()
-
     class Meta:
         model = Bid
         exclude = ('id',)
@@ -49,12 +46,12 @@ class BidSerializer(serializers.ModelSerializer):
                 max_price = auction_limit - 1
                 if len(bids) > 0:
                     max_price = bids.aggregate(Max('price')).get('price__max')
-                if max_price > price:
+                if max_price >= price:
                     raise serializers.ValidationError("Higher bid for this auction already exists.")
             else:
                 min_price = auction_limit + 1
                 if len(bids) > 0:
                     min_price = bids.aggregate(Min('price')).get('price__min')
-                if min_price < price:
+                if min_price <= price:
                     raise serializers.ValidationError("Lower bid for this auction already exists.")
         return data

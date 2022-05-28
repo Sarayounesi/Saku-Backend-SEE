@@ -13,7 +13,6 @@ class CreateAuctionTest(APITestCase):
         self.user = User.objects.create(id=1, username="Mehdi")
         self.client.force_authenticate(self.user)
         Category.objects.create(name="C1")
-        Tags.objects.create(name="T1")
         self.request_data = {"created_at": "2019-08-24T14:15:22Z",
                              "name": "string",
                              "finished_at": "2019-08-24T14:15:22Z",
@@ -22,10 +21,11 @@ class CreateAuctionTest(APITestCase):
                              "is_private": True,
                              "user": 0,
                              "category": "C1",
-                             "tags": ["T1"]}
+                             "tags": ["T1", "T2"]}
+        
 
     def test_not_found_user(self):
-        response = self.client.post(path='/auction/', data=self.request_data)
+        response = self.client.post(path='/auction/', data=self.request_data, format="json")
         self.assertEqual(400, response.status_code)
         self.assertEqual(1, len(response.data))
         self.assertIn(ErrorDetail(string='Invalid pk "0" - object does not exist.', code='does_not_exist'),
@@ -33,7 +33,8 @@ class CreateAuctionTest(APITestCase):
 
     def test_with_equal_dates(self):
         self.request_data["user"] = 1
-        response = self.client.post(path='/auction/', data=self.request_data)
+        response = self.client.post(path='/auction/', data=self.request_data, format="json")
+        print(response.data)
         self.assertEqual(400, response.status_code)
         self.assertEqual(1, len(response.data))
         self.assertIn(ErrorDetail(string="created_at can't be greater or equal to finished_at", code='invalid'),
@@ -43,7 +44,7 @@ class CreateAuctionTest(APITestCase):
         auctions_count = Auction.objects.count()
         self.request_data["user"] = 1
         self.request_data["finished_at"] = "2020-08-24T14:15:22Z"
-        response = self.client.post(path='/auction/', data=self.request_data)
+        response = self.client.post(path='/auction/', data=self.request_data, format="json")
         self.assertEqual(201, response.status_code)
         self.assertEqual(auctions_count + 1, Auction.objects.count())
 

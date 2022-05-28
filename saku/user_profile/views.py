@@ -14,12 +14,15 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         serializer = self.get_serializer(data=self.request.data)
         serializer.is_valid(raise_exception=True)
         user = self.request.user
-        user.email = serializer.data.get('email')
-        user.save()
+        email = serializer.data.get('email')
+        if email:
+            user.email = email
+            user.save()
         profile = Profile.objects.filter(user=user)[0]
+        old_profile_image = profile.profile_image
         new_profile_image = self.request.data.get('profile_image')
-        if new_profile_image:
-            os.remove(profile.profile_image.path)
+        if new_profile_image and old_profile_image:
+            os.remove(old_profile_image.path)
         return profile
 
     def get_serializer_context(self):
