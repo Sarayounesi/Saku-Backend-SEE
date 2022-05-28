@@ -1,11 +1,10 @@
 import datetime
-
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 from rest_framework.test import APIClient
 from rest_framework import status
-
+from rest_framework.exceptions import ErrorDetail
 from auction.models import Auction, Tags, Category
 from .models import Bid
 
@@ -47,6 +46,12 @@ class BidTest(TestCase):
         url = reverse("bid:list_create_bid", args=(self.auction.token,))
 
         data =  {"price":"60000"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(ErrorDetail(string='Auction owners cannot bids for their auctions.', code='invalid'),
+                      response.data["non_field_errors"])
+
+        self.client.force_authenticate(self.user2)
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["price"], 60000)

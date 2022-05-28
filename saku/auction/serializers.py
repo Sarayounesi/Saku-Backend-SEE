@@ -12,7 +12,7 @@ def get_random_token():
 
 
 class CreateAuctionRequestSerializer(serializers.ModelSerializer):
-    # tags = serializers.ListSerializer(child=serializers.CharField(), required=False)
+    # tags = serializers.ListSerializer(child=serializers.CharField())
 
     class Meta:
         model = Auction
@@ -25,13 +25,6 @@ class CreateAuctionRequestSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         token = get_random_token()
-        tag_names = validated_data.get('tags')
-        tags = []
-        if tag_names:
-            for tag in tag_names:
-                tag_instance, _ = Tags.objects.get_or_create(name=tag)
-                tags.append(tag_instance)
-        validated_data['tags'] = tags
         while Auction.objects.filter(token=token).exists():
             token = get_random_token()
         validated_data['token'] = token
@@ -56,6 +49,16 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
                   'mode', 'limit', 'location', 'description', 'is_private',
                   'category', 'tags', 'participants_num', 'show_best_bid', 'best_bid')
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].context.update(self.context)
+        # if not self.fields['show_best_bid']:
+        #     self.fields['best_bid'].del()
+
+    def get_serializer_context(self):
+        context={'request':self.context.get('request')}
+        return context
+
     def get_best_bid(self, obj):
         bids = Bid.objects.filter(auction=obj.id).order_by('price')
         if len(bids)>0:
@@ -63,6 +66,6 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
                 best_bid = bids.last()
             else:
                 best_bid = bids.first()
-            user_data = GeneralProfileSerializer(best_bid.user).data
+            user_data = GeneralProfileSerializer(best_bid.user, context={'request':self.context.get('request')}).data
             return {"user":user_data, "time":best_bid.time, "price":best_bid.price}
         return {}

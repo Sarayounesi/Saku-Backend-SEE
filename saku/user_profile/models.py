@@ -1,4 +1,4 @@
-import os, random
+import os, random, string
 
 from django.contrib.auth.models import User
 from django.db import models
@@ -9,10 +9,8 @@ national_id_validator = RegexValidator(regex=r'^\d{10}$', message="natinal id is
 
 def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
-    chars= 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
-    randomstr= ''.join((random.choice(chars)) for x in range(10))
-    return 'images/profile_images/{basename}{randomstring}{ext}'.format(
-        userid= instance.user.id, basename=basefilename, randomstring=randomstr, ext=file_extension)
+    randomstr = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    return 'images/profile_images/{randomstring}{ext}'.format(randomstring=randomstr, ext=file_extension)
 
 
 class Profile(models.Model):
