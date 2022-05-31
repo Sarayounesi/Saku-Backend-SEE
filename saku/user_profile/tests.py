@@ -26,21 +26,31 @@ class ProfileTest(TestCase):
         response = self.client.put(url, data1, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+<<<<<<< HEAD
     def test_update_profile_failure_phone(self):
         url = reverse("user_profile:update_profile")
 
         data2 =  {"phone" : "090", "email" : "email@email.com"}
+=======
+        data2 = {"phone": "090", "email": "email@email.com"}
+>>>>>>> f3e8767... Refactor tests.py
         response = self.client.put(url, data2, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(ErrorDetail(string="Phone number is invalid (.eg '09123456789')", code='invalid'), response.data["phone"])
+        self.assertIn(ErrorDetail(string="Phone number is invalid (.eg '09123456789')", code='invalid'),
+                      response.data["phone"])
 
+<<<<<<< HEAD
     def test_update_profile_failure_email(self):
         url = reverse("user_profile:update_profile")
         data3 =  {"email" : "email.com" }
+=======
+        data3 = {"email": "email.com"}
+>>>>>>> f3e8767... Refactor tests.py
         response = self.client.put(url, data3, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn(ErrorDetail(string='Enter a valid email address.', code='invalid'), response.data["email"])
 
+<<<<<<< HEAD
     def test_update_picture_failure(self):
         url = reverse("user_profile:update_profile")
         data1 =  {"profile_image" : "1.jpg"}
@@ -57,3 +67,8 @@ class ProfileTest(TestCase):
         url = reverse("user_profile:update_profile")
         response = self.client.get(url, format="json")
         self.assertEqual(response.data['profile_image'], None)
+=======
+        data4 = {}
+        response = self.client.put(url, data4, format="json")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+>>>>>>> f3e8767... Refactor tests.py

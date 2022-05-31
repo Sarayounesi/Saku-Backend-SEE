@@ -21,7 +21,7 @@ services:
   web:
     build: .
     tty: true
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8888"
+    command: /bin/sh -c "cd saku && python manage.py test"
     volumes:
       - .:/code
     ports:
