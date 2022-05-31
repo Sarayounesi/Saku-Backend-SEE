@@ -5,6 +5,11 @@ on:
     branches:
       - main
     types: [closed]
+  workflow_run:
+    workflows: [ "CI" ]
+    branches: [ main ]
+    types:
+      - completed
 
 jobs:
 
@@ -20,5 +25,4 @@ jobs:
       - name: Deploy
         shell: bash
         run: |
-          export TAG=`git rev-parse HEAD~1`
           ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ github.sha }} && docker-compose down && docker-compose -f docker-compose.deploy.yml up -d"
