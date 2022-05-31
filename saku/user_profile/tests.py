@@ -35,7 +35,3 @@ class ProfileTest(TestCase):
         response = self.client.put(url, data3, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn(ErrorDetail(string='Enter a valid email address.', code='invalid'), response.data["email"])
-
-        data4 =  {} 
-        response = self.client.put(url, data4, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
