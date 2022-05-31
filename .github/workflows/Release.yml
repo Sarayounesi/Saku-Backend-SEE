@@ -27,6 +27,7 @@ jobs:
       run: |
         docker login --username=${{ secrets.REGISTRY_USERNAME }} --password=${{ secrets.PAT }} ghcr.io
         export TAG=${{ github.sha }}
+        echo $TAG
         docker pull ghcr.io/mehdi-mostafavi/saku:$TAG
         docker tag ghcr.io/mehdi-mostafavi/saku:$TAG ghcr.io/mehdi-mostafavi/saku:${{ steps.release.outputs.tag_name }}
         docker push ghcr.io/mehdi-mostafavi/saku:${{ steps.release.outputs.tag_name }}
