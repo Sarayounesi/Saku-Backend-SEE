@@ -34,7 +34,6 @@ class CreateAuctionTest(APITestCase):
     def test_with_equal_dates(self):
         self.request_data["user"] = 1
         response = self.client.post(path='/auction/', data=self.request_data, format="json")
-        print(response.data)
         self.assertEqual(400, response.status_code)
         self.assertEqual(1, len(response.data))
         self.assertIn(ErrorDetail(string="created_at can't be greater or equal to finished_at", code='invalid'),

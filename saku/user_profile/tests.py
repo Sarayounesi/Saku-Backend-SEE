@@ -22,20 +22,21 @@ class ProfileTest(TestCase):
     def test_update_profile(self):
         url = reverse("user_profile:update_profile")
 
-        data1 =  {"name" : "Ali", "phone":"09123456789", "email":"email@email.com"} 
+        data1 = {"name": "Ali", "phone": "09123456789", "email": "email@email.com"}
         response = self.client.put(url, data1, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-        data2 =  {"phone" : "090", "email" : "email@email.com"} 
+        data2 = {"phone": "090", "email": "email@email.com"}
         response = self.client.put(url, data2, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(ErrorDetail(string="Phone number is invalid (.eg '09123456789')", code='invalid'), response.data["phone"])
+        self.assertIn(ErrorDetail(string="Phone number is invalid (.eg '09123456789')", code='invalid'),
+                      response.data["phone"])
 
-        data3 =  {"email" : "email.com" } 
+        data3 = {"email": "email.com"}
         response = self.client.put(url, data3, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn(ErrorDetail(string='Enter a valid email address.', code='invalid'), response.data["email"])
 
-        data4 =  {} 
+        data4 = {}
         response = self.client.put(url, data4, format="json")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)

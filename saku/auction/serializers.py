@@ -1,4 +1,3 @@
-import logging
 import random
 import string
 from rest_framework import serializers
@@ -12,7 +11,6 @@ def get_random_token():
 
 
 class CreateAuctionRequestSerializer(serializers.ModelSerializer):
-    # tags = serializers.ListSerializer(child=serializers.CharField())
 
     class Meta:
         model = Auction
