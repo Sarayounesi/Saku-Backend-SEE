@@ -15,10 +15,10 @@ services:
   web:
     build: .
     tty: true
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8888"
     volumes:
       - .:/code
     ports:
-      - "8000:8000"
+      - "8888:8888"
     depends_on:
       - db
