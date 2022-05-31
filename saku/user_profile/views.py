@@ -1,5 +1,5 @@
 import os
-from rest_framework import generics
+from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from .serializers import ProfileSerializer
@@ -29,3 +29,17 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         context = super(UpdateProfile, self).get_serializer_context()
         context.update({"user": self.request.user})
         return context
+
+
+class DeleteProfilePicture(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+
+    def post(self, request):
+        user = request.user
+        profile = Profile.objects.filter(user=user)[0]
+        if profile.profile_image:
+            os.remove(profile.profile_image.path)
+            profile.profile_image = None
+            profile.save()
+        return Response({'message':'Profile picture deleted'}, status=status.HTTP_200_OK)
