@@ -14,7 +14,7 @@ services:
 
   web:
     image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
-    command: /bin/sh -c "cd saku && sleep 10 && python manage.py test"
+    command: /bin/sh -c "cd saku && sleep 10 && coverage run ./manage.py test && coverage report"
     volumes:
       - .:/code
     ports:
