@@ -4,10 +4,11 @@ from .models import Comment
 from user_profile.serializers import GeneralProfileSerializer
 
 
-class GetCommentSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Comment
-        exclude = ['reply_depth', 'reply_on']
+        fields = ['isCollapsed', 'id', 'user', 'auction', 'date', 'content', 'replies']
         extra_kwargs = {
             'replies' : {'read_only' : True}
         }
@@ -19,15 +20,4 @@ class GetCommentSerializer(serializers.ModelSerializer):
         if reply_depth != None and reply_depth != 0 :
             del self.fields['isCollapsed']
         if reply_depth != None and reply_depth <= 2 :
-                self.fields['replies'] = GetCommentSerializer(many=True, read_only=True, context={'reply_depth':reply_depth+1})
-
-
-class CreateCommentSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = Comment
-        fields = '__all__'
-
-    def create(self, validated_data):
-        instance = Comment.objects.create(**validated_data)
-        return instance
+                self.fields['replies'] = CommentSerializer(many=True, read_only=True, context={'reply_depth':reply_depth+1})
