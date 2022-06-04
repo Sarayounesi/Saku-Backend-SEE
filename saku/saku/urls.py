@@ -23,6 +23,7 @@ urlpatterns = [
     path('account/', include('account.urls')),
     path('profile/', include('user_profile.urls')),
     path('bid/', include('bid.urls')),
+    path('comment/', include('comment.urls')),
 ]
 
 # url for user profile images:
