@@ -187,7 +187,11 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "saku.project.app@gmail.com"
 EMAIL_HOST_PASSWORD = "jnuzfnsrbbaqsjhl"
 
+<<<<<<< HEAD
 
+=======
+<<<<<<< HEAD
+>>>>>>> f88eb10... Add api to get categories
 # CELERY
 CELERY_BROKER_URL = 'redis://redis:6379'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -197,11 +201,19 @@ CELERY_BROKER_URL = 'redis://redis:6379'
 # CELERY_TIMEZONE = 'Asia/Tehran'
 CELERY_TIMEZONE = 'UTC'
 
+<<<<<<< HEAD
 
+=======
+=======
+>>>>>>> f88eb10... Add api to get categories
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
 ASGI_APPLICATION = 'saku.asgi.application'
+<<<<<<< HEAD
 
+=======
+>>>>>>> cb2a51d... Add api to get categories
+>>>>>>> f88eb10... Add api to get categories
