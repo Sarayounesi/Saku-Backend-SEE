@@ -12,13 +12,20 @@ services:
     ports:
       - "15432:5432"
 
+  redis:
+    image: m.docker-registry.ir/redis:7.0.1-alpine
+    command: redis-server
+    ports:
+      - "16379:6379"
+
   web:
     build: .
     tty: true
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && celery -A saku worker  --loglevel=INFO -D && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
       - "8000:8000"
     depends_on:
       - db
+      - redis

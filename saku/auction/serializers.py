@@ -16,7 +16,7 @@ class CreateAuctionRequestSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Auction
-        exclude = ('token',)
+        exclude = ('token', 'celery_task_id')
 
     def validate(self, data):
         if data["finished_at"] <= data["created_at"]:
@@ -60,12 +60,15 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
         return context
 
     def get_best_bid(self, obj):
-        bids = Bid.objects.filter(auction=obj.id).order_by('price')
-        if len(bids)>0:
-            if obj.mode == 1:
-                best_bid = bids.last()
-            else:
-                best_bid = bids.first()
+        best_bid = obj.best_bid
+        if best_bid == None:
+            bids = Bid.objects.filter(auction=obj.id).order_by('price')
+            if len(bids)>0:
+                if obj.mode == 1:
+                    best_bid = bids.last()
+                else:
+                    best_bid = bids.first()
+        if best_bid != None:
             user_data = GeneralProfileSerializer(best_bid.user, context={'request':self.context.get('request')}).data
             return {"user":user_data, "time":best_bid.time, "price":best_bid.price}
         return {}
