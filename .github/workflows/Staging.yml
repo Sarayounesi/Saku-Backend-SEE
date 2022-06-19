@@ -20,4 +20,4 @@ jobs:
       - name: Deploy
         shell: bash
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ github.sha }} && docker-compose down && docker-compose -f docker-compose.staging.yml up -d"
+          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ github.sha }} &&  docker-compose -f docker-compose.staging.yml down && docker-compose -f docker-compose.staging.yml up -d"
