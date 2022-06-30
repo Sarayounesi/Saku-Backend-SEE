@@ -21,7 +21,7 @@ services:
   web:
     build: .
     tty: true
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && celery -A saku worker  --loglevel=INFO -D && python manage.py runserver 0.0.0.0:8000"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     volumes:
       - .:/code
     ports:
@@ -29,3 +29,20 @@ services:
     depends_on:
       - db
       - redis
+
+  celery:
+    restart: always
+    build:
+      context: .
+    command: /bin/sh -c "cd saku && celery -A saku worker -l info"
+    volumes:
+      - .:/code
+    environment:
+      - DB_HOST=db
+      - DB_NAME=saku-db
+      - DB_USER=postgres
+      - DB_PASS=saku1234
+    depends_on:
+      - db
+      - redis
+      - web

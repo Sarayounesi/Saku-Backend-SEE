@@ -4,7 +4,8 @@ from bid.models import Bid
 
 # - daramad
 def get_income(user):
-    return Auction.objects.filter(user=user, best_bid__isnull=False).aggregate(Sum('best_bid__price'))['best_bid__price__sum']
+    income = Auction.objects.filter(user=user, best_bid__isnull=False).aggregate(Sum('best_bid__price'))['best_bid__price__sum']
+    return 0 if income==None else income
 
 # - tedad auction movafagh (best_bid.user=user and finished_at > datetime.now)
 def get_seccussfull_auction_count(user):
@@ -25,21 +26,25 @@ def get_auctions_count(all_user_auctions):
 #   - finished_at
 #   - vaziat (barande, bazande)
 def get_last_auctions_participated(user, all_user_bids):
+    all_user_bids = all_user_bids.order_by('-time')
     success_choices = ['successfull', 'failed', 'unknown']
     last_auctions = []
     auctions = set()
     for user_bid in all_user_bids:
-        if auctions.count() == 5:
+        if len(auctions) == 5:
             break
-        if not auctions.contains(user_bid.auction.pk):
-            auctions.add(user_bid.auction.pk)
-            best_bid_user = user_bid.auction.best_bid.user
-            if best_bid_user == user:
-                success = success_choices[0]
-            elif best_bid_user == None:
+        if user_bid.auction.pk not in auctions:
+            auction = user_bid.auction
+            auctions.add(auction.pk)
+            best_bid = auction.best_bid
+            if best_bid==None:
                 success = success_choices[2]
             else:
-                success = success_choices[1]
+                best_bid_user = best_bid.user
+                if best_bid_user == user:
+                    success = success_choices[0]
+                else:
+                    success = success_choices[1]
             auction_info = {'mode': auction.mode,
                         'name': auction.name,
                         'created_at': auction.created_at,
@@ -57,7 +62,7 @@ def get_last_auctions_participated(user, all_user_bids):
 #   - best_bid
 #   - cathegory
 def get_last_auctions_created(all_user_auctions):
-    return all_user_auctions.order_by('created_at').values(
+    return all_user_auctions.order_by('-created_at').values(
                 'mode', 'name', 'participants_num', 'created_at', 'finished_at', 'best_bid', 'category')[:5]
 
 # - list daramad ha
@@ -137,6 +142,7 @@ def get_auction2_create_count(user):
 
 # - payam haye akhir
 def get_last_chats(user):
+    # username = user.username
     pass
 
 # - list az:

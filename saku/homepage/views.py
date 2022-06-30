@@ -36,8 +36,8 @@ class HomepageView(generics.GenericAPIView):
                             'auction2_participate_count' : get_auction2_participate_count(user),
                             'auction2_create_count' : get_auction2_create_count(user),
                             # 'last_chats' : get_last_chats(user),
-                            'income_list' : get_yearly_income_list(user, year),
-                            'expense_list' : get_yearly_expense_list(user, year, all_user_bids),
+                            'yearly_income_list' : get_yearly_income_list(user, year),
+                            'yearly_expense_list' : get_yearly_expense_list(user, year, all_user_bids),
                     }
             }
         return Response(response, status=status.HTTP_200_OK)
