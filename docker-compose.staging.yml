@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: m.docker-registry.ir/postgres:12-alpine3.15
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=saku-staging-db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=saku1234
+    ports:
+      - "5432:5432"
+
+  web-staging:
+    image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8887"
+    ports:
+      - "8887:8887"
+    depends_on:
+      - db
+    environment:
+      - PYTHONUNBUFFERED=1
+
+volumes:
+  postgres_data:

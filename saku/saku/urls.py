@@ -25,7 +25,8 @@ urlpatterns = [
     path('bid/', include('bid.urls')),
     path('comment/', include('comment.urls')),
     path('homepage/', include('homepage.urls')),
+    path('chat/', include('chat.urls')),
 ]
 
 # url for user profile images:
-urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
