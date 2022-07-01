@@ -24,6 +24,7 @@ urlpatterns = [
     path('profile/', include('user_profile.urls')),
     path('bid/', include('bid.urls')),
     path('comment/', include('comment.urls')),
+    path('homepage/', include('homepage.urls')),
     path('chat/', include('chat.urls')),
 ]
 
