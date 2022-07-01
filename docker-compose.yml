@@ -13,7 +13,7 @@ services:
       - "15432:5432"
 
   redis:
-    image: m.docker-registry.ir/redis:7.0.1-alpine
+    image: m.docker-registry.ir/redis:7.0.2-alpine
     command: redis-server
     ports:
       - "16379:6379"
