@@ -1,6 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
 from .tasks import save_best_bid
+from saku.celery import app
 
 
 class Category(models.Model):

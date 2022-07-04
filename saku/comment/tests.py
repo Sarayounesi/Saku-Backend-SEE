@@ -70,5 +70,5 @@ class CommentTest(TestCase):
     def test_get_comment(self):
         url = reverse("comment:list_create_comment", args=(self.auction.token,))
         response = self.client.get(url, self.data, format="json")
-        comments = Comment.objects.filter(auction=self.auction)
+        comments = Comment.objects.filter(auction=self.auction, reply_depth=0)
         self.assertEqual(len(response.data), len(comments))

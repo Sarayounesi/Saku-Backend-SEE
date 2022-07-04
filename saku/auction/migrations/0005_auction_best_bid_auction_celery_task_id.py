@@ -8,7 +8,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('bid', '0002_rename_auctoin_bid_auction'),
-        ('auction', '0003_alter_auction_tags'),
+        ('auction', '0004_alter_auction_table_alter_category_table_and_more'),
     ]
 
     operations = [
