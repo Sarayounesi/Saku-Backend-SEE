@@ -1,16 +1,27 @@
 from django.db.models import Max
 from rest_framework import serializers
+from user_profile.serializers import GeneralProfileSerializer
 from auction.models import Auction
 from bid.models import Bid
 
 
 class BidSerializer(serializers.ModelSerializer):
+    user = GeneralProfileSerializer()
+
     class Meta:
         model = Bid
         exclude = ('id',)
         extra_kwargs = {
             "price": {"required": True}
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['user'].context.update(self.context)
+
+    def get_serializer_context(self):
+        context={'request':self.context.get('request')}
+        return context
 
     def validate(self, data):
         user = data.get('user')
