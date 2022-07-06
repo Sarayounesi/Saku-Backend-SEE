@@ -33,6 +33,9 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
         token = self.kwargs['token']
         auction = get_object_or_404(Auction, token=token)
         return Bid.objects.filter(auction=auction)
+    
+    def get_serializer_context(self):
+        return {"request": request}
 
 
 class UserBidsView(generics.ListAPIView):

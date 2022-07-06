@@ -45,7 +45,7 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
         model = Auction
         fields = ('name', 'token', 'user', 'created_at', 'finished_at',
                   'mode', 'limit', 'location', 'description', 'is_private',
-                  'category', 'tags', 'participants_num', 'show_best_bid', 'best_bid')
+                  'category', 'tags', 'participants_num', 'show_best_bid', 'best_bid', 'auction_image')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
