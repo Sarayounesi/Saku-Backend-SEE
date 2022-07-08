@@ -10,31 +10,32 @@ from django.core.exceptions import ValidationError
 
 from saku.settings import EMAIL_HOST_USER
 from user_profile.models import Profile
-from .serializers import (RegisterSerializer, 
-                            ChangePasswordSerializer,
-                            ForgotPasswordSerializer)
+from .serializers import (RegisterSerializer,
+                          ChangePasswordSerializer,
+                          ForgotPasswordSerializer)
 
-#send_email is slow!
+
+# send_email is slow!
 class Register(generics.GenericAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-    def post(self, request,*args, **kwargs):
+    def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         username = serializer.data.get('username')
         email = serializer.data.get('email')
         randomcode = random.randrange(1000, 9999)
         send_mail('Verify Email', f'Hi {username}!\nYour verification code is: {randomcode}',
-                EMAIL_HOST_USER, recipient_list=[email], fail_silently=False)
-        return Response({'code':randomcode}, status=status.HTTP_200_OK)
+                  EMAIL_HOST_USER, recipient_list=[email], fail_silently=False)
+        return Response({'code': randomcode}, status=status.HTTP_200_OK)
 
 
 class CompeleteRegisteration(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
-    def create(self, request,*args, **kwargs):
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
@@ -47,17 +48,17 @@ class ChangePassword(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ChangePasswordSerializer
 
-    def update(self, request,*args, **kwargs):
+    def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             user = request.user
             user.set_password(serializer.data.get("new_password"))
             user.save()
             response = {
-                    'status': 'success',
-                    'code': status.HTTP_200_OK,
-                    'message': 'Password updated successfully',
-                    'data': []
+                'status': 'success',
+                'code': status.HTTP_200_OK,
+                'message': 'Password updated successfully',
+                'data': []
             }
             return Response(response, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -84,12 +85,12 @@ class ForgotPassword(generics.GenericAPIView):
                     'data': []
                 }
                 return Response(response, status=status.HTTP_400_BAD_REQUEST)
-            
+
             new_password = User.objects.make_random_password()
             user.set_password(new_password)
             user.save()
             send_mail('New Password', f'Hi {user.username}!\nYour new password is: {new_password}', EMAIL_HOST_USER,
-                    recipient_list=[user.email], fail_silently=False)
+                      recipient_list=[user.email], fail_silently=False)
             response = {
                 'status': 'success',
                 'code': status.HTTP_200_OK,
