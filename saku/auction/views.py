@@ -1,4 +1,4 @@
-import base64
+import base64, os
 from drf_yasg.utils import swagger_auto_schema
 from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer, GetCategoriesSerializer
 from rest_framework import generics, status
@@ -77,7 +77,7 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
 
         instance = self.get_object()
 
-        old_image = auction.auction_image
+        old_image = instance.auction_image
         new_image = self.request.data.get('auction_image')
         if new_image and old_image:
             try:
@@ -104,7 +104,7 @@ class DeleteAuctionPicture(generics.GenericAPIView):
     queryset = Auction.objects.all()
     lookup_field = 'token'
 
-    def post(self, request):
+    def post(self, request, token):
         instance = self.get_object()
         if instance.auction_image:
             try:

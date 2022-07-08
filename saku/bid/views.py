@@ -35,7 +35,7 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
         return Bid.objects.filter(auction=auction)
     
     def get_serializer_context(self):
-        return {"request": request}
+        return {"request": self.request}
 
 
 class UserBidsView(generics.ListAPIView):

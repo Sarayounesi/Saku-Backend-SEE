@@ -1,3 +1,4 @@
+import os, random, string
 from django.contrib.auth.models import User
 from django.db import models
 from .tasks import save_best_bid

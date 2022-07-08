@@ -6,8 +6,6 @@ from bid.models import Bid
 
 
 class BidSerializer(serializers.ModelSerializer):
-    user = GeneralProfileSerializer()
-
     class Meta:
         model = Bid
         exclude = ('id',)
@@ -17,7 +15,8 @@ class BidSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['user'].context.update(self.context)
+        if self.context.get('request').method == 'GET':
+            self.fields['user'] = GeneralProfileSerializer(context={'request':self.context.get('request')})
 
     def get_serializer_context(self):
         context={'request':self.context.get('request')}
