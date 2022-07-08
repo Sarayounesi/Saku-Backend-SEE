@@ -2,7 +2,8 @@ import base64
 from drf_yasg.utils import swagger_auto_schema
 from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer, GetCategoriesSerializer
 from rest_framework import generics, status
-from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer, UpdateAuctionRequestSerializer
+from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer, \
+    UpdateAuctionRequestSerializer
 from rest_framework.response import Response
 from saku.serializers import GeneralCreateResponseSerializer, GeneralErrorResponseSerializer
 from rest_framework.permissions import IsAuthenticated
@@ -27,13 +28,21 @@ class CreateListAuction(generics.ListCreateAPIView):
         request.data['tags'] = tags
         return super().post(request, *args, **kwargs)
 
+    def get_queryset(self):
+        if self.request.method == 'GET':
+            username = self.request.GET.get('username')
+            if username:
+                return Auction.objects.filter(user__username=username).order_by("-created_at")
+        return Auction.objects.order_by("-created_at")
+
     @swagger_auto_schema(
         responses={201: GeneralCreateResponseSerializer,
                    400: GeneralErrorResponseSerializer},
     )
+
     def get(self, request, *args, **kwargs):
         auctions = self.get_queryset()
-        serializer = GetAuctionRequestSerializer(auctions, many=True, context={'request' : request})
+        serializer = GetAuctionRequestSerializer(auctions, many=True, context={'request': request})
         return Response(serializer.data, status=200)
 
     def get_serializer_class(self):
@@ -57,7 +66,7 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
     def get(self, request, *args, **kwargs):
         return super().get(request, *args, **kwargs)
 
-    def update(self, request,*args, **kwargs):
+    def update(self, request, *args, **kwargs):
         tag_names = request.data.get('tags')
         tags = []
         if tag_names:

@@ -41,7 +41,7 @@ class Auction(models.Model):
     participants_num = models.IntegerField(default=0)
     show_best_bid = models.BooleanField(default=False)
     celery_task_id = models.CharField(max_length=100)
-    best_bid = models.ForeignKey(to='bid.Bid', related_name='best_bid', on_delete=models.DO_NOTHING, null=True)
+    best_bid = models.ForeignKey(to='bid.Bid', related_name='best_bid', on_delete=models.DO_NOTHING, null=True, blank=True)
 
     def __str__(self):
         return self.name
