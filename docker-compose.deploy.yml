@@ -28,6 +28,7 @@ services:
       - redis
     environment:
       - PYTHONUNBUFFERED=1
+      - DEBUG=false
 
   celery:
     restart: always
