@@ -77,7 +77,11 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
 
         instance = self.get_object()
 
+<<<<<<< HEAD
         old_image = instance.auction_image
+=======
+        old_image = auction.auction_image
+>>>>>>> a2c7bec40601a765c2627227b6da32e0f34a808c
         new_image = self.request.data.get('auction_image')
         if new_image and old_image:
             try:

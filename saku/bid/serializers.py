@@ -6,6 +6,8 @@ from bid.models import Bid
 
 
 class BidSerializer(serializers.ModelSerializer):
+    user = GeneralProfileSerializer()
+
     class Meta:
         model = Bid
         exclude = ('id',)
