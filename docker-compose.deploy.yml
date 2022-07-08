@@ -16,11 +16,11 @@ services:
     image: m.docker-registry.ir/redis:7.0.2-alpine
     command: redis-server
     ports:
-      - "16379:6379"
+      - "26379:6379"
 
   web:
     image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8888"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && celery -A saku worker -l info -D && python manage.py runserver 0.0.0.0:8888"
     ports:
       - "8888:8888"
     depends_on:
@@ -29,22 +29,6 @@ services:
     environment:
       - PYTHONUNBUFFERED=1
       - DEBUG=false
-
-  celery:
-    restart: always
-    image: m.docker-registry.ir/celery:4
-    command: /bin/sh -c "cd saku && celery -A saku worker -l info"
-    volumes:
-      - .:/code
-    environment:
-      - DB_HOST=db
-      - DB_NAME=saku-db
-      - DB_USER=postgres
-      - DB_PASS=saku1234
-    depends_on:
-      - db
-      - redis
-      - web
 
 volumes:
   postgres_data:

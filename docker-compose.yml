@@ -16,7 +16,7 @@ services:
     image: m.docker-registry.ir/redis:7.0.2-alpine
     command: redis-server
     ports:
-      - "16379:6379"
+      - "26379:6379"
 
   web:
     build: .
@@ -30,19 +30,3 @@ services:
       - db
       - redis
 
-  celery:
-    restart: always
-    build:
-      context: .
-    command: /bin/sh -c "cd saku && celery -A saku worker -l info"
-    volumes:
-      - .:/code
-    environment:
-      - DB_HOST=db
-      - DB_NAME=saku-db
-      - DB_USER=postgres
-      - DB_PASS=saku1234
-    depends_on:
-      - db
-      - redis
-      - web
