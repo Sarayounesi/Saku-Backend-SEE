@@ -32,8 +32,7 @@ services:
 
   celery:
     restart: always
-    build:
-      context: .
+    image: m.docker-registry.ir/celery:4
     command: /bin/sh -c "cd saku && celery -A saku worker -l info"
     volumes:
       - .:/code
