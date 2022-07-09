@@ -187,7 +187,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "saku.project.app@gmail.com"
 EMAIL_HOST_PASSWORD = "jnuzfnsrbbaqsjhl"
 
-
 # CELERY
 CELERY_BROKER_URL = 'redis://redis:6379'
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -197,11 +196,9 @@ CELERY_BROKER_URL = 'redis://redis:6379'
 # CELERY_TIMEZONE = 'Asia/Tehran'
 CELERY_TIMEZONE = 'UTC'
 
-
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels.layers.InMemoryChannelLayer"
     }
 }
 ASGI_APPLICATION = 'saku.asgi.application'
-

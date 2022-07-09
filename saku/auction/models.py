@@ -1,7 +1,18 @@
+import os, random, string
 from django.contrib.auth.models import User
 from django.db import models
 from .tasks import save_best_bid
 from saku.celery import app
+
+def photo_path(instance, filename):
+    basefilename, file_extension= os.path.splitext(filename)
+    randomstr = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    return 'images/auction_images/{randomstring}{ext}'.format(randomstring=randomstr, ext=file_extension)
+
+def photo_path(instance, filename):
+    basefilename, file_extension= os.path.splitext(filename)
+    randomstr = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
+    return 'images/auction_images/{randomstring}{ext}'.format(randomstring=randomstr, ext=file_extension)
 
 
 class Category(models.Model):
@@ -41,7 +52,9 @@ class Auction(models.Model):
     participants_num = models.IntegerField(default=0)
     show_best_bid = models.BooleanField(default=False)
     celery_task_id = models.CharField(max_length=100)
-    best_bid = models.ForeignKey(to='bid.Bid', related_name='best_bid', on_delete=models.DO_NOTHING, null=True, blank=True)
+    best_bid = models.ForeignKey(to='bid.Bid', related_name='best_bid', on_delete=models.DO_NOTHING, null=True)
+    auction_image = models.ImageField(upload_to=photo_path, null=True, blank=True)
+
 
     def __str__(self):
         return self.name

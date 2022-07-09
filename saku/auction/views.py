@@ -1,4 +1,4 @@
-import base64
+import base64, os
 from drf_yasg.utils import swagger_auto_schema
 from auction.serializers import CreateAuctionRequestSerializer, GetAuctionRequestSerializer, GetCategoriesSerializer
 from rest_framework import generics, status
@@ -76,6 +76,19 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
             request.data['tags'] = tags
 
         instance = self.get_object()
+
+<<<<<<< HEAD
+        old_image = instance.auction_image
+=======
+        old_image = auction.auction_image
+>>>>>>> a2c7bec40601a765c2627227b6da32e0f34a808c
+        new_image = self.request.data.get('auction_image')
+        if new_image and old_image:
+            try:
+                os.remove(old_image.path)
+            except:
+                pass
+
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -88,6 +101,23 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
 
     def get_serializer_context(self):
         return {"token": self.kwargs['token']}
+
+
+class DeleteAuctionPicture(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    queryset = Auction.objects.all()
+    lookup_field = 'token'
+
+    def post(self, request, token):
+        instance = self.get_object()
+        if instance.auction_image:
+            try:
+                os.remove(instance.auction_image.path)
+            except:
+                pass
+            instance.auction_image = None
+            instance.save()
+        return Response({'message':'Auction picture deleted'}, status=status.HTTP_200_OK)
 
 
 class CategoryList(generics.ListAPIView):

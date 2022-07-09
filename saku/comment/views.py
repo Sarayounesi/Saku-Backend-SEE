@@ -1,3 +1,4 @@
+
 import datetime
 from rest_framework import generics, status
 from rest_framework.response import Response
@@ -30,7 +31,7 @@ class ListCreateComments(generics.ListCreateAPIView):
     def get(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = GetCommentSerializer(queryset, many=True,
-                                          context={'request': self.request, 'reply_depth': 0})
+                                        context={'request':self.request, 'reply_depth':0})
         return Response(serializer.data)
 
 
@@ -41,14 +42,13 @@ class ReplyCommentView(generics.CreateAPIView):
     def post(self, request, pk):
         comment = get_object_or_404(Comment, id=pk)
         reply_depth = comment.reply_depth + 1
-        if (comment.reply_depth < 2):
+        if(comment.reply_depth < 2):
             request.data['user'] = request.user.id
             request.data['reply_on'] = comment.id
             request.data['reply_depth'] = reply_depth
             request.data['auction'] = comment.auction.id
-            serializer = self.get_serializer(data=request.data,
-                                             context={'request': request, 'reply_depth': reply_depth})
+            serializer = self.get_serializer(data=request.data, context={'request':request, 'reply_depth':reply_depth})
             serializer.is_valid(raise_exception=True)
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response({'massage': 'cant reply on this comment'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({'massage':'cant reply on this comment'}, status=status.HTTP_400_BAD_REQUEST)

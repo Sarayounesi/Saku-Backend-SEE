@@ -20,7 +20,7 @@ services:
 
   web:
     image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
-    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && celery -A saku worker -l info -D && python manage.py runserver 0.0.0.0:8888"
+    command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8888"
     ports:
       - "8888:8888"
     depends_on:
