@@ -85,7 +85,7 @@ class GetAuctionTest(APITestCase):
         response = self.client.get(path='/auction/')
         self.assertEqual(200, response.status_code)
         self.assertEqual(2, len(response.data))
-        self.assertEqual('auction1', response.data[0]['name'])
+        self.assertEqual('auction2', response.data[0]['name'])
 
     def test_get_detailed_auction(self):
         response = self.client.get(path='/auction/qwertyui')
