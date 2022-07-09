@@ -1,4 +1,4 @@
-import base64, os
+import os
 from drf_yasg.utils import swagger_auto_schema
 from auction.serializers import (
     CreateAuctionRequestSerializer,
@@ -18,6 +18,7 @@ from saku.serializers import (
 )
 from rest_framework.permissions import IsAuthenticated
 from auction.models import Auction, Category, Tags
+from datetime import datetime
 
 
 class CreateListAuction(generics.ListCreateAPIView):
@@ -42,13 +43,40 @@ class CreateListAuction(generics.ListCreateAPIView):
         return super().post(request, *args, **kwargs)
 
     def get_queryset(self):
-        if self.request.method == "GET":
-            username = self.request.GET.get("username")
+        auctions = Auction.objects.order_by("-created_at")
+        if self.request.method == 'GET':
+            username = self.request.GET.get('username')
             if username:
-                return Auction.objects.filter(user__username=username).order_by(
-                    "-created_at"
-                )
-        return Auction.objects.order_by("-created_at")
+                return auctions.filter(user__username=username)
+
+            name = self.request.GET.get('name')
+            if name:
+                return auctions.filter(name__contains=name)
+
+            mode = self.request.GET.get('mode')
+            if mode:
+                return auctions.filter(mode=mode)
+
+            category = self.request.GET.get('category')
+            if category:
+                return auctions.filter(category__name=category)
+
+            tag = self.request.GET.get('tag')
+            if tag:
+                return auctions.filter(tags__in=tag)
+
+            finished = self.request.GET.get('finished')
+            if finished and finished == "true":
+                return auctions.filter(finished_at__lt=datetime.now())
+
+            elif finished and finished == "false":
+                return auctions.filter(finished_at__gte=datetime.now())
+
+            limit = self.request.GET.get('limit')
+            if limit:
+                return auctions.filter(limit__gta=int(limit))
+
+        return auctions
 
     @swagger_auto_schema(
         responses={
