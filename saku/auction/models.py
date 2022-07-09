@@ -8,6 +8,7 @@ def photo_path(instance, filename):
     basefilename, file_extension= os.path.splitext(filename)
     randomstr = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(10))
     return 'images/auction_images/{randomstring}{ext}'.format(randomstring=randomstr, ext=file_extension)
+    
 
 class Category(models.Model):
 

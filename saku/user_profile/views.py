@@ -22,7 +22,10 @@ class UpdateProfile(generics.RetrieveUpdateAPIView):
         old_profile_image = profile.profile_image
         new_profile_image = self.request.data.get('profile_image')
         if new_profile_image and old_profile_image:
-            os.remove(old_profile_image.path)
+            try:
+                os.remove(old_profile_image.path)
+            except:
+                pass
         return profile
 
     def get_serializer_context(self):
@@ -39,7 +42,10 @@ class DeleteProfilePicture(generics.GenericAPIView):
         user = request.user
         profile = Profile.objects.filter(user=user)[0]
         if profile.profile_image:
-            os.remove(profile.profile_image.path)
+            try:
+                os.remove(profile.profile_image.path)
+            except:
+                pass
             profile.profile_image = None
             profile.save()
         return Response({'message':'Profile picture deleted'}, status=status.HTTP_200_OK)
