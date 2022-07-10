@@ -72,6 +72,7 @@ class CreateAuctionTest(APITestCase):
         self.assertEqual(1, len(response.data[0]))
 
     def test_auction_best_bid(self):
+        category = Category.objects.create(name="Category")
         tags = [Tags.objects.create(name="T1"), Tags.objects.create(name="T2")]
         auction = Auction.objects.create(
             **{
