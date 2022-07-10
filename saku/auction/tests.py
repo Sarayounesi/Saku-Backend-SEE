@@ -1,3 +1,5 @@
+import datetime
+import time
 from rest_framework.test import APIClient
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
@@ -11,6 +13,7 @@ class CreateAuctionTest(APITestCase):
     def setUp(self) -> None:
         self.client = APIClient()
         self.user = User.objects.create(id=1, username="Mehdi")
+        self.user2 = User.objects.create(id=2, username="Mehdi2")
         self.client.force_authenticate(self.user)
         Category.objects.create(name="C1")
         self.request_data = {
@@ -23,7 +26,6 @@ class CreateAuctionTest(APITestCase):
             "user": 0,
             "category": "C1",
             "tags": "T1,T2",
-            "token": "qwertyui",
         }
 
     def test_not_found_user(self):
@@ -68,6 +70,31 @@ class CreateAuctionTest(APITestCase):
         response = self.client.get(path="/auction/categories/")
         self.assertEqual(200, response.status_code)
         self.assertEqual(1, len(response.data[0]))
+
+    def test_auction_best_bid(self):
+        tags = [Tags.objects.create(name="T1"), Tags.objects.create(name="T2")]
+        auction = Auction.objects.create(
+            **{
+                "created_at": "2019-08-24T14:15:22Z",
+                "name": "auction1",
+                "finished_at": datetime.datetime.now() + datetime.timedelta(0,10),
+                "mode": 1,
+                "limit": 0,
+                "is_private": False,
+                "user": self.user,
+                "token": "qwertyui",
+                "category": category,
+            }
+        ).tags.set(tags)
+        Bid.objects.create(
+            user=self.user2,
+            price=500,
+            auction=auction,
+            time="2022-07-24T14:15:22Z",
+        )
+        time.sleep(40)
+        response = self.client.get(path="/auction/qwertyui")
+        self.assertEqual(500, response.data["best_bid"]["price"])
 
 
 class GetAuctionTest(APITestCase):
