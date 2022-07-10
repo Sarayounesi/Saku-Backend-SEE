@@ -14,6 +14,9 @@ class ProfileTest(TestCase):
         self.user = User.objects.create_user(
             username="test_user", password="Ab654321", email="email@email.com"
         )
+        user2 = User.objects.create_user(
+            username="test_user2", password="Ab654321", email="email2@email.com"
+        )
         self.user.is_active = True
         self.user.save()
         self.profile = Profile.objects.create(user=self.user, email=self.user.email)

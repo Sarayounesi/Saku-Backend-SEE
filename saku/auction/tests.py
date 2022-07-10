@@ -2,6 +2,7 @@ from rest_framework.test import APIClient
 from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
+from rest_framework import status
 from auction.models import Auction, Tags, Category
 
 
@@ -22,6 +23,7 @@ class CreateAuctionTest(APITestCase):
             "user": 0,
             "category": "C1",
             "tags": "T1,T2",
+            "token": "qwertyui",
         }
 
     def test_not_found_user(self):
@@ -161,3 +163,21 @@ class EditAuctionTest(APITestCase):
             ),
             response.data["non_field_errors"],
         )
+
+    def test_update_image_failure(self):
+        data1 = {"auction_image": "1.jpg"}
+        response = self.client.put(path="/auction/qwertyui", data=data1)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(
+            ErrorDetail(
+                string="The submitted data was not a file. Check the encoding type on the form.",
+                code="invalid",
+            ),
+            response.data["auction_image"],
+        )
+
+    def test_delete_image_success(self):
+        response = self.client.post(path="/auction/picture/qwertyui")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        response = self.client.get(path="/auction/qwertyui")
+        self.assertEqual(response.data["auction_image"], None)

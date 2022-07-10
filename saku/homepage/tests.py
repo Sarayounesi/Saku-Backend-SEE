@@ -127,51 +127,67 @@ class HomePageTest(TestCase):
         self.auction4_user2.participants_num = 1
         self.auction4_user2.save()
 
-    def test_homepage(self):
+    def test_income(self):
         url = reverse("homepage:homepage", args=(2020,))
         response = self.client.get(url, format="json")
         data = response.data["data"]
-
         income = data["income"]
-        seccussfull_auction_count = data["seccussfull_auction_count"]
-        auctions_participants_num = data["auctions_participants_num"]
-        auctions_count = data["auctions_count"]
-        last_auctions_participated = data["last_auctions_participated"]
-        last_auctions_created = data["last_auctions_created"]
         income_list = data["income_list"]
-        your_colaberation_list = data["your_colaberation_list"]
-        your_colaberation_count = data["your_colaberation_count"]
-        others_colaberation_list = data["others_colaberation_list"]
-        others_colaberation_count = data["others_colaberation_count"]
-        expense_list = data["expense_list"]
-        expense = data["expense"]
-        auction1_participate_count = data["auction1_participate_count"]
-        auction1_create_count = data["auction1_create_count"]
-        auction2_participate_count = data["auction2_participate_count"]
-        auction2_create_count = data["auction2_create_count"]
-        yearly_income_list = data["yearly_income_list"]
-        yearly_expense_list = data["yearly_expense_list"]
 
-        # income
         self.assertEqual(income, 500)
         self.assertEqual(len(income_list), 1)
         self.assertEqual(income_list[0], 500)
         self.assertEqual(sum(income_list), income)
-        # colaberation
+
+    def test_colaberation(self):
+        url = reverse("homepage:homepage", args=(2020,))
+        response = self.client.get(url, format="json")
+        data = response.data["data"]
+        your_colaberation_list = data["your_colaberation_list"]
+        your_colaberation_count = data["your_colaberation_count"]
+        others_colaberation_list = data["others_colaberation_list"]
+        others_colaberation_count = data["others_colaberation_count"]
+
         self.assertEqual(sum(your_colaberation_list), your_colaberation_count)
         self.assertEqual(sum(others_colaberation_list), others_colaberation_count)
-        # expense
+
+    def test_expense(self):
+        url = reverse("homepage:homepage", args=(2020,))
+        response = self.client.get(url, format="json")
+        data = response.data["data"]
+        expense_list = data["expense_list"]
+        expense = data["expense"]
+
         self.assertEqual(expense, 300)
         self.assertEqual(len(expense_list), 1)
         self.assertEqual(expense_list[0], 300)
         self.assertEqual(sum(expense_list), expense)
-        # auction created
+
+    def test_auction_created(self):
+        url = reverse("homepage:homepage", args=(2020,))
+        response = self.client.get(url, format="json")
+        data = response.data["data"]
+        auctions_count = data["auctions_count"]
+        last_auctions_created = data["last_auctions_created"]
+        auction1_create_count = data["auction1_create_count"]
+        auction2_create_count = data["auction2_create_count"]
+        
         self.assertEqual(auctions_count, 2)
         self.assertEqual(len(last_auctions_created), 2)
         self.assertEqual(auction1_create_count, 1)
         self.assertEqual(auction2_create_count, 1)
         self.assertEqual(auction1_create_count + auction2_create_count, auctions_count)
-        # auction participated
+
+    def test_auction_participated(self):
+        url = reverse("homepage:homepage", args=(2020,))
+        response = self.client.get(url, format="json")
+        data = response.data["data"]
+        seccussfull_auction_count = data["seccussfull_auction_count"]
+        auctions_participants_num = data["auctions_participants_num"]
+        last_auctions_participated = data["last_auctions_participated"]
+        auction1_participate_count = data["auction1_participate_count"]
+        auction2_participate_count = data["auction2_participate_count"]
+
         self.assertEqual(seccussfull_auction_count, 1)
         self.assertEqual(auctions_participants_num, 2)
         self.assertEqual(len(last_auctions_participated), 2)
@@ -181,7 +197,14 @@ class HomePageTest(TestCase):
             auction1_participate_count + auction2_participate_count,
             auctions_participants_num,
         )
-        # yearly report
+
+    def test_yearly_report(self):
+        url = reverse("homepage:homepage", args=(2020,))
+        response = self.client.get(url, format="json")
+        data = response.data["data"]
+        yearly_income_list = data["yearly_income_list"]
+        yearly_expense_list = data["yearly_expense_list"]
+
         self.assertEqual(len(yearly_income_list), 1)
         self.assertEqual(yearly_income_list[0], 500)
         self.assertEqual(len(yearly_expense_list), 0)

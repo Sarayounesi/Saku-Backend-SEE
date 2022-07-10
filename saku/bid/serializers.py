@@ -1,4 +1,4 @@
-from django.db.models import Max
+from django.db.models import Max, Min
 from rest_framework import serializers
 from user_profile.serializers import GeneralProfileSerializer
 from auction.models import Auction
