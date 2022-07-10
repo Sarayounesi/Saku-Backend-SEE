@@ -60,18 +60,18 @@ class Auction(models.Model):
     def __str__(self):
         return self.name
 
-    def save(self, *args, **kwargs):
-        try:
-            pre_finished_at = Auction.objects.get(pk=self.pk).finished_at
-        except Auction.DoesNotExist:
-            pre_finished_at = None
-        super().save(*args, **kwargs)
-        post_finished_at = self.finished_at
-        if not self.celery_task_id:  # initial task creation
-            task_object = save_best_bid.apply_async((self.pk,), eta=post_finished_at)
-            Auction.objects.filter(pk=self.pk).update(celery_task_id=task_object.id)
-        elif pre_finished_at != post_finished_at:
-            # revoke the old task
-            app.control.revoke(self.celery_task_id, terminate=True)
-            task_object = save_best_bid.apply_async((self.pk,), eta=post_finished_at)
-            Auction.objects.filter(pk=self.pk).update(celery_task_id=task_object.id)
+    # def save(self, *args, **kwargs):
+    #     try:
+    #         pre_finished_at = Auction.objects.get(pk=self.pk).finished_at
+    #     except Auction.DoesNotExist:
+    #         pre_finished_at = None
+    #     super().save(*args, **kwargs)
+    #     post_finished_at = self.finished_at
+    #     if not self.celery_task_id:  # initial task creation
+    #         task_object = save_best_bid.apply_async((self.pk,), eta=post_finished_at)
+    #         Auction.objects.filter(pk=self.pk).update(celery_task_id=task_object.id)
+    #     elif pre_finished_at != post_finished_at:
+    #         # revoke the old task
+    #         app.control.revoke(self.celery_task_id, terminate=True)
+    #         task_object = save_best_bid.apply_async((self.pk,), eta=post_finished_at)
+    #         Auction.objects.filter(pk=self.pk).update(celery_task_id=task_object.id)

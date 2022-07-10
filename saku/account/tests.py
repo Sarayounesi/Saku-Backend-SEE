@@ -74,7 +74,22 @@ class AccountTest(TestCase):
         self.assertTrue("refresh" in response.data)
         self.assertTrue("access" in response.data)
 
-    def test_change_password_failure_(self):
+    def test_change_password_failure_length(self):
+        self.client.force_authenticate(self.user)
+        url = reverse("account:change_password")
+        data = {
+            "old_password": "654321",
+            "new_password": "654321",
+            "new_password2": "654321",
+        }
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(
+            ErrorDetail(string="Password was entered incorrectly", code="invalid"),
+            response.data["non_field_errors"],
+        )
+
+    def test_change_password_failure_length(self):
         self.client.force_authenticate(self.user)
         url = reverse("account:change_password")
         data = {
@@ -123,3 +138,16 @@ class AccountTest(TestCase):
         Profile.objects.create(user=self.user, email="shahrzad123azari@gmail.com")
         response = self.client.post(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_logout(self):
+        url = reverse("account:login")
+        response = self.client.post(
+            url, {"username": "test_user", "password": "Ab654321"}, format="json"
+        )
+
+        url = reverse("account:logout")
+        response = self.client.post(
+            url, {"refresh": response.data["refresh"]}, format="json"
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTrue("access" in response.data)

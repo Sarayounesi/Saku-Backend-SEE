@@ -56,6 +56,20 @@ class BidTest(TestCase):
         self.auction2.tags.set(tags)
         self.auction2.save()
 
+        self.auction3 = Auction.objects.create(
+            created_at="2019-08-24T14:15:22Z",
+            token="33sdInBc",
+            name="string",
+            finished_at="2023-08-24T14:15:22Z",
+            mode=2,
+            limit=3000,
+            is_private=False,
+            user=self.user,
+            category=category,
+        )
+        self.auction2.tags.set(tags)
+        self.auction2.save()
+
         self.client.force_authenticate(self.user2)
 
     def test_create_bid_success(self):
@@ -129,6 +143,23 @@ class BidTest(TestCase):
         self.assertIn(
             ErrorDetail(
                 string="Users cannot bid higher than auction limit.", code="invalid"
+            ),
+            response.data["non_field_errors"],
+        )
+
+    def test_create_bid_failure_lower_exists(self):
+        url = reverse("bid:list_create_bid", args=(self.auction3.token,))
+
+        data = {"price": "1000"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        data = {"price": "2000"}
+        response = self.client.post(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn(
+            ErrorDetail(
+                string="Lower bid for this auction already exists.", code="invalid"
             ),
             response.data["non_field_errors"],
         )
