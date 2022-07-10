@@ -16,7 +16,8 @@ class BidSerializer(serializers.ModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.context.get('request').method == 'GET':
-            self.fields['user'] = GeneralProfileSerializer(context={'request':self.context.get('request')})
+            self.fields['user'] = GeneralProfileSerializer(context={
+                                        'request':self.context.get('request')})
 
     def get_serializer_context(self):
         context={'request':self.context.get('request')}
