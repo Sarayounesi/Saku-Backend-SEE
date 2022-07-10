@@ -49,6 +49,7 @@ class Auction(models.Model):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
     tags = models.ManyToManyField(Tags, blank=True)
     participants_num = models.IntegerField(default=0)
+    is_online = models.BooleanField(default=False)
     show_best_bid = models.BooleanField(default=False)
     celery_task_id = models.CharField(max_length=100)
     best_bid = models.ForeignKey(
