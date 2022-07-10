@@ -7,18 +7,20 @@ import user_profile.models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_profile', '0005_profile_profile_image'),
+        ("user_profile", "0005_profile_profile_image"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='email',
+            model_name="profile",
+            name="email",
             field=models.EmailField(max_length=254),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='profile_image',
-            field=models.ImageField(blank=True, null=True, upload_to=user_profile.models.photo_path),
+            model_name="profile",
+            name="profile_image",
+            field=models.ImageField(
+                blank=True, null=True, upload_to=user_profile.models.photo_path
+            ),
         ),
     ]

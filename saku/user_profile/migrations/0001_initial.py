@@ -16,18 +16,63 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('person_type', models.CharField(choices=[('N', 'natural'), ('L', 'legal')], default='N', max_length=1)),
-                ('name', models.CharField(blank=True, max_length=40)),
-                ('national_id', models.CharField(blank=True, max_length=10, validators=[django.core.validators.RegexValidator(message="natinal id is invalid (.eg '1111111111')", regex='^\\d{10}$')])),
-                ('phone', models.CharField(blank=True, max_length=11, validators=[django.core.validators.RegexValidator(message="Phone number is invalid (.eg '09123456789')", regex='^09\\d{9}$')])),
-                ('email', models.EmailField(blank=True, max_length=254, null=True)),
-                ('city', models.CharField(blank=True, max_length=20)),
-                ('province', models.CharField(blank=True, max_length=20)),
-                ('address', models.CharField(blank=True, max_length=50)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "person_type",
+                    models.CharField(
+                        choices=[("N", "natural"), ("L", "legal")],
+                        default="N",
+                        max_length=1,
+                    ),
+                ),
+                ("name", models.CharField(blank=True, max_length=40)),
+                (
+                    "national_id",
+                    models.CharField(
+                        blank=True,
+                        max_length=10,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="natinal id is invalid (.eg '1111111111')",
+                                regex="^\\d{10}$",
+                            )
+                        ],
+                    ),
+                ),
+                (
+                    "phone",
+                    models.CharField(
+                        blank=True,
+                        max_length=11,
+                        validators=[
+                            django.core.validators.RegexValidator(
+                                message="Phone number is invalid (.eg '09123456789')",
+                                regex="^09\\d{9}$",
+                            )
+                        ],
+                    ),
+                ),
+                ("email", models.EmailField(blank=True, max_length=254, null=True)),
+                ("city", models.CharField(blank=True, max_length=20)),
+                ("province", models.CharField(blank=True, max_length=20)),
+                ("address", models.CharField(blank=True, max_length=50)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

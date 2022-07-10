@@ -6,28 +6,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auction', '0001_initial'),
+        ("auction", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='auction',
-            name='description',
+            model_name="auction",
+            name="description",
             field=models.CharField(blank=True, max_length=200),
         ),
         migrations.AddField(
-            model_name='auction',
-            name='location',
+            model_name="auction",
+            name="location",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AddField(
-            model_name='auction',
-            name='participants_num',
+            model_name="auction",
+            name="participants_num",
             field=models.IntegerField(default=0),
         ),
         migrations.AddField(
-            model_name='auction',
-            name='show_best_bid',
+            model_name="auction",
+            name="show_best_bid",
             field=models.BooleanField(default=False),
         ),
     ]

@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bid', '0002_rename_auctoin_bid_auction'),
+        ("bid", "0002_rename_auctoin_bid_auction"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='bid',
-            name='time',
+            model_name="bid",
+            name="time",
             field=models.DateTimeField(auto_now=True),
         ),
     ]

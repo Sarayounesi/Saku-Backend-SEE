@@ -13,13 +13,13 @@ from bid.models import Bid
 class ListCreateAuctionBid(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BidSerializer
-    filterset_fields = ('user', 'auction')
-    ordering_fields = ('time', 'price')
+    filterset_fields = ("user", "auction")
+    ordering_fields = ("time", "price")
 
     def post(self, request, token):
         auction = get_object_or_404(Auction, token=token)
-        request.data['user'] = request.user.id
-        request.data['auction'] = auction.id
+        request.data["user"] = request.user.id
+        request.data["auction"] = auction.id
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         bid = serializer.save()
@@ -29,10 +29,10 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def get_queryset(self):
-        token = self.kwargs['token']
+        token = self.kwargs["token"]
         auction = get_object_or_404(Auction, token=token)
         return Bid.objects.filter(auction=auction)
-    
+
     def get_serializer_context(self):
         return {"request": self.request}
 
@@ -40,8 +40,8 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
 class UserBidsView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BidSerializer
-    filterset_fields = ('auction',)
-    ordering_fields = ('time', 'price')
+    filterset_fields = ("auction",)
+    ordering_fields = ("time", "price")
 
     def get_queryset(self):
         user = self.request.user
@@ -51,10 +51,10 @@ class UserBidsView(generics.ListAPIView):
 class UserAuctionBidsView(generics.ListAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = BidSerializer
-    ordering_fields = ('time', 'price')
+    ordering_fields = ("time", "price")
 
     def get_queryset(self):
         user = self.request.user
-        token = self.kwargs['token']
+        token = self.kwargs["token"]
         auction = get_object_or_404(Auction, token=token)
         return Bid.objects.filter(user=user, auction=auction)

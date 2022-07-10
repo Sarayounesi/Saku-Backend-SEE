@@ -6,7 +6,7 @@ class GetChatSerializer(Serializer):
     created_at = DateTimeField(required=True)
 
     class Meta:
-        fields = ('created_at', 'username')
+        fields = ("created_at", "username")
 
 
 class GetMessageSerializer(Serializer):
@@ -15,4 +15,4 @@ class GetMessageSerializer(Serializer):
     created_at = DateTimeField(required=True)
 
     class Meta:
-        fields = ('text', 'sender', 'created_at')
+        fields = ("text", "sender", "created_at")

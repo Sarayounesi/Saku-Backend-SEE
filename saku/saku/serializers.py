@@ -5,7 +5,7 @@ class GeneralCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(default="Created!", min_length=5)
 
     class Meta:
-        fields = '__all__'
+        fields = "__all__"
 
 
 class GeneralErrorResponseSerializer(serializers.Serializer):
