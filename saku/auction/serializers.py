@@ -11,7 +11,6 @@ def get_random_token():
 
 
 class CreateAuctionRequestSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Auction
         exclude = ('token', 'celery_task_id')
@@ -52,21 +51,21 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
         self.fields['user'].context.update(self.context)
 
     def get_serializer_context(self):
-        context={'request':self.context.get('request')}
+        context = {'request': self.context.get('request')}
         return context
 
     def get_best_bid(self, obj):
         best_bid = obj.best_bid
         if best_bid == None:
             bids = Bid.objects.filter(auction=obj.id).order_by('price')
-            if len(bids)>0:
+            if len(bids) > 0:
                 if obj.mode == 1:
                     best_bid = bids.last()
                 else:
                     best_bid = bids.first()
         if best_bid != None:
-            user_data = GeneralProfileSerializer(best_bid.user, context={'request':self.context.get('request')}).data
-            return {"user":user_data, "time":best_bid.time, "price":best_bid.price}
+            user_data = GeneralProfileSerializer(best_bid.user, context={'request': self.context.get('request')}).data
+            return {"user": user_data, "time": best_bid.time, "price": best_bid.price}
         return {}
 
 
@@ -77,16 +76,15 @@ class GetCategoriesSerializer(serializers.ModelSerializer):
 
 
 class UpdateAuctionRequestSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Auction
         exclude = ('token', 'user')
         extra_kwargs = {
-            'created_at' : {'read_only' : True},
-            'mode' : {'read_only' : True},
-            'limit' : {'read_only' : True},
-            'is_private' : {'read_only' : True},
-            'participants_num' : {'read_only' : True},
+            'created_at': {'read_only': True},
+            'mode': {'read_only': True},
+            'limit': {'read_only': True},
+            'is_private': {'read_only': True},
+            'participants_num': {'read_only': True},
         }
 
     def validate(self, data):
