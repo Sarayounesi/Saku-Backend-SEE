@@ -6,20 +6,20 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('auction', '0003_alter_auction_tags'),
+        ("auction", "0003_alter_auction_tags"),
     ]
 
     operations = [
         migrations.AlterModelTable(
-            name='auction',
+            name="auction",
             table=None,
         ),
         migrations.AlterModelTable(
-            name='category',
+            name="category",
             table=None,
         ),
         migrations.AlterModelTable(
-            name='tags',
+            name="tags",
             table=None,
         ),
     ]

@@ -7,43 +7,61 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('user_profile', '0001_initial'),
+        ("user_profile", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='profile',
-            name='address',
+            model_name="profile",
+            name="address",
             field=models.CharField(blank=True, max_length=50),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='city',
+            model_name="profile",
+            name="city",
             field=models.CharField(blank=True, max_length=20),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='email',
+            model_name="profile",
+            name="email",
             field=models.EmailField(blank=True, max_length=254, null=True),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='name',
+            model_name="profile",
+            name="name",
             field=models.CharField(blank=True, max_length=40),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='national_id',
-            field=models.CharField(blank=True, max_length=10, validators=[django.core.validators.RegexValidator(message="natinal id is invalid (.eg '1111111111')", regex='^\\d{10}$')]),
+            model_name="profile",
+            name="national_id",
+            field=models.CharField(
+                blank=True,
+                max_length=10,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="natinal id is invalid (.eg '1111111111')",
+                        regex="^\\d{10}$",
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='phone',
-            field=models.CharField(blank=True, max_length=11, validators=[django.core.validators.RegexValidator(message="Phone number is invalid (.eg '09123456789')", regex='^09\\d{9}$')]),
+            model_name="profile",
+            name="phone",
+            field=models.CharField(
+                blank=True,
+                max_length=11,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Phone number is invalid (.eg '09123456789')",
+                        regex="^09\\d{9}$",
+                    )
+                ],
+            ),
         ),
         migrations.AlterField(
-            model_name='profile',
-            name='province',
+            model_name="profile",
+            name="province",
             field=models.CharField(blank=True, max_length=20),
         ),
     ]

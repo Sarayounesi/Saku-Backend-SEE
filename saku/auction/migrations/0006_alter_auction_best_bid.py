@@ -7,14 +7,20 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('bid', '0002_rename_auctoin_bid_auction'),
-        ('auction', '0005_auction_best_bid_auction_celery_task_id'),
+        ("bid", "0002_rename_auctoin_bid_auction"),
+        ("auction", "0005_auction_best_bid_auction_celery_task_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='auction',
-            name='best_bid',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.DO_NOTHING, related_name='best_bid', to='bid.bid'),
+            model_name="auction",
+            name="best_bid",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.DO_NOTHING,
+                related_name="best_bid",
+                to="bid.bid",
+            ),
         ),
     ]

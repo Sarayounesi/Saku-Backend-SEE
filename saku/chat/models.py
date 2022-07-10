@@ -4,8 +4,11 @@ from django.contrib.auth.models import User
 
 # Create your models here.
 
+
 class Chat(models.Model):
-    token = models.CharField(max_length=25, blank=False, editable=False, null=False, default="")
+    token = models.CharField(
+        max_length=25, blank=False, editable=False, null=False, default=""
+    )
     created_at = models.DateTimeField(auto_now=True)
 
     def contact_username(self, username):

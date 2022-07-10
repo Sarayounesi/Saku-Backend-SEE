@@ -9,11 +9,11 @@ from .models import Profile
 
 
 class ProfileTest(TestCase):
-
     def setUp(self):
         self.client = APIClient()
         self.user = User.objects.create_user(
-            username='test_user', password='Ab654321', email='email@email.com')
+            username="test_user", password="Ab654321", email="email@email.com"
+        )
         self.user.is_active = True
         self.user.save()
         self.profile = Profile.objects.create(user=self.user, email=self.user.email)
@@ -29,25 +29,38 @@ class ProfileTest(TestCase):
     def test_update_profile_failure_phone(self):
         url = reverse("user_profile:update_profile")
 
-        data2 =  {"phone" : "090", "email" : "email@email.com"}
+        data2 = {"phone": "090", "email": "email@email.com"}
         response = self.client.put(url, data2, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(ErrorDetail(string="Phone number is invalid (.eg '09123456789')", code='invalid'), response.data["phone"])
+        self.assertIn(
+            ErrorDetail(
+                string="Phone number is invalid (.eg '09123456789')", code="invalid"
+            ),
+            response.data["phone"],
+        )
 
     def test_update_profile_failure_email(self):
         url = reverse("user_profile:update_profile")
-        data3 =  {"email" : "email.com" }
+        data3 = {"email": "email.com"}
         response = self.client.put(url, data3, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(ErrorDetail(string='Enter a valid email address.', code='invalid'), response.data["email"])
+        self.assertIn(
+            ErrorDetail(string="Enter a valid email address.", code="invalid"),
+            response.data["email"],
+        )
 
     def test_update_picture_failure(self):
         url = reverse("user_profile:update_profile")
-        data1 =  {"profile_image" : "1.jpg"}
+        data1 = {"profile_image": "1.jpg"}
         response = self.client.put(url, data1, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-        self.assertIn(ErrorDetail(string='The submitted data was not a file. Check the encoding type on the form.', code='invalid')
-                                , response.data["profile_image"])
+        self.assertIn(
+            ErrorDetail(
+                string="The submitted data was not a file. Check the encoding type on the form.",
+                code="invalid",
+            ),
+            response.data["profile_image"],
+        )
 
     def test_delete_picture_success(self):
         url = reverse("user_profile:delete_profile_image")
@@ -56,4 +69,4 @@ class ProfileTest(TestCase):
 
         url = reverse("user_profile:update_profile")
         response = self.client.get(url, format="json")
-        self.assertEqual(response.data['profile_image'], None)
+        self.assertEqual(response.data["profile_image"], None)

@@ -10,25 +10,53 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('auction', '0003_alter_auction_tags'),
+        ("auction", "0003_alter_auction_tags"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Comment',
+            name="Comment",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('isCollapsed', models.BooleanField(default=False)),
-                ('date', models.DateTimeField()),
-                ('content', models.CharField(max_length=200)),
-                ('reply_depth', models.IntegerField(default=0)),
-                ('auction', models.ForeignKey(null=True, on_delete=django.db.models.deletion.CASCADE, to='auction.auction')),
-                ('reply_on', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='replies', to='comment.comment')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("isCollapsed", models.BooleanField(default=False)),
+                ("date", models.DateTimeField()),
+                ("content", models.CharField(max_length=200)),
+                ("reply_depth", models.IntegerField(default=0)),
+                (
+                    "auction",
+                    models.ForeignKey(
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="auction.auction",
+                    ),
+                ),
+                (
+                    "reply_on",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="replies",
+                        to="comment.comment",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
     ]

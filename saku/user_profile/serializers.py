@@ -6,16 +6,15 @@ from .models import Profile
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = '__all__'
-        extra_kwargs = {
-            "user": {"read_only": True},
-            "email": {"required" : False}
-        }
+        fields = "__all__"
+        extra_kwargs = {"user": {"read_only": True}, "email": {"required": False}}
 
     def validate_email(self, email):
-        user = self.context.get('user')
-        if user.email != email and len(Profile.objects.filter(email=email))>0:
-            raise serializers.ValidationError("Another user exists with this email address.")
+        user = self.context.get("user")
+        if user.email != email and len(Profile.objects.filter(email=email)) > 0:
+            raise serializers.ValidationError(
+                "Another user exists with this email address."
+            )
         return email
 
 
@@ -27,7 +26,7 @@ class GeneralProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
         fields = ["id", "username", "name", "profile_image"]
-    
+
     def get_username(self, obj):
         return obj.username
 
@@ -44,7 +43,7 @@ class GeneralProfileSerializer(serializers.ModelSerializer):
             if image:
                 request = self.context.get("request")
                 if request:
-                    base_url = request.build_absolute_uri('/').strip("/")
-                    profile_url = base_url + '/media/' + f"{image}"
+                    base_url = request.build_absolute_uri("/").strip("/")
+                    profile_url = base_url + "/media/" + f"{image}"
                     return profile_url
         return None

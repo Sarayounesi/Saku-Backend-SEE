@@ -17,7 +17,9 @@ class ChatConsumer(AsyncConsumer):
 
     def _get_user_id_by_jwt(self):
         sender_jwt = self.scope["url_route"]["kwargs"]["sender_jwt"]
-        return jwt.decode(sender_jwt, key=settings.SECRET_KEY, algorithms=['HS256'])['user_id']
+        return jwt.decode(sender_jwt, key=settings.SECRET_KEY, algorithms=["HS256"])[
+            "user_id"
+        ]
 
     @database_sync_to_async
     def _get_user_by_id(self, user_id):
@@ -39,7 +41,9 @@ class ChatConsumer(AsyncConsumer):
         self.user = await self._get_user_by_id(self._get_user_id_by_jwt())
         self.contact_username = self.scope["url_route"]["kwargs"]["username"]
 
-        if not self.contact_username or not await self._is_user_exists(self.contact_username):
+        if not self.contact_username or not await self._is_user_exists(
+            self.contact_username
+        ):
             raise exceptions.DenyConnection
 
         usernames = sorted([self.user.username, self.contact_username])
@@ -50,14 +54,9 @@ class ChatConsumer(AsyncConsumer):
 
         self.chat = await self._get_chat(self.token)
 
-        await self.channel_layer.group_add(
-            self.token,
-            self.channel_name
-        )
+        await self.channel_layer.group_add(self.token, self.channel_name)
 
-        await self.send({
-            'type': 'websocket.accept'
-        })
+        await self.send({"type": "websocket.accept"})
 
     async def websocket_disconnect(self, event):
         pass
@@ -65,17 +64,8 @@ class ChatConsumer(AsyncConsumer):
     async def websocket_receive(self, event):
         await self._create_message(json.loads(event["text"])["message"], self.user)
         await self.channel_layer.group_send(
-            self.token,
-            {
-                'type': 'chat_message',
-                'text': event["text"]
-            }
+            self.token, {"type": "chat_message", "text": event["text"]}
         )
 
     async def chat_message(self, event):
-        await self.send(
-            {
-                'type': 'websocket.send',
-                'text': event['text']
-            }
-        )
+        await self.send({"type": "websocket.send", "text": event["text"]})

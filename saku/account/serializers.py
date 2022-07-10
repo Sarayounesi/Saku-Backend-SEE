@@ -12,17 +12,20 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
 
     def validate_email(self, email):
-        if (User.objects.filter(email=email)):
-            raise serializers.ValidationError("There is another account with this email")
+        if User.objects.filter(email=email):
+            raise serializers.ValidationError(
+                "There is another account with this email"
+            )
         return email
-
 
     def create(self, validated_data):
         # create user account
-        user = User.objects.create(username=validated_data['username'], email=validated_data['email'])
-        user.set_password(validated_data['password'])
+        user = User.objects.create(
+            username=validated_data["username"], email=validated_data["email"]
+        )
+        user.set_password(validated_data["password"])
         # create user profile
-        Profile.objects.create(user=user, national_id='0', email=user.email)
+        Profile.objects.create(user=user, national_id="0", email=user.email)
         return user
 
 
@@ -33,16 +36,16 @@ class ChangePasswordSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['old_password', 'new_password', 'new_password2']
+        fields = ["old_password", "new_password", "new_password2"]
 
     def validate_old_password(self, data):
-        user = self.context['request'].user
+        user = self.context["request"].user
         if not user.check_password(data):
-            raise serializers.ValidationError(('Password was entered incorrectly'))
+            raise serializers.ValidationError(("Password was entered incorrectly"))
         return data
 
     def validate(self, data):
-        if data['new_password']!=data['new_password2']:
+        if data["new_password"] != data["new_password2"]:
             raise serializers.ValidationError("Passwords are not the same")
         return data
 
@@ -54,4 +57,4 @@ class ForgotPasswordSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         # fields = ['username']
-        fields = ['email']
+        fields = ["email"]
