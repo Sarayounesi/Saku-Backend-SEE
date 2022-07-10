@@ -34,7 +34,8 @@ class CreateListAuction(generics.ListCreateAPIView):
         tag_names = request.data.get("tags")
         tags = []
         if tag_names:
-            for tag in tag_names:
+            splited_tags = [x.strip() for x in tag_names.split(',')]
+            for tag in splited_tags:
                 tag_instance, _ = Tags.objects.get_or_create(name=tag)
                 tags.append(tag_instance)
         request.data["tags"] = tags
@@ -91,7 +92,8 @@ class DetailedAuction(generics.RetrieveUpdateAPIView):
         tag_names = request.data.get("tags")
         tags = []
         if tag_names:
-            for tag in tag_names:
+            splited_tags = [x.strip() for x in tag_names.split(',')]
+            for tag in splited_tags:
                 tag_instance, _ = Tags.objects.get_or_create(name=tag)
                 tags.append(tag_instance)
             request.data["tags"] = tags

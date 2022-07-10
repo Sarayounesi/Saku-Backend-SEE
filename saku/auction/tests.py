@@ -21,7 +21,7 @@ class CreateAuctionTest(APITestCase):
             "is_private": True,
             "user": 0,
             "category": "C1",
-            "tags": ["T1", "T2"],
+            "tags": "T1,T2",
         }
 
     def test_not_found_user(self):
