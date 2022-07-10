@@ -63,6 +63,7 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
             "show_best_bid",
             "best_bid",
             "auction_image",
+            "is_online"
         )
 
     def __init__(self, *args, **kwargs):

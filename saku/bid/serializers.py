@@ -6,22 +6,21 @@ from bid.models import Bid
 
 
 class BidSerializer(serializers.ModelSerializer):
-    user = GeneralProfileSerializer()
-
     class Meta:
         model = Bid
-        exclude = ("id",)
-        extra_kwargs = {"price": {"required": True}}
+        exclude = ('id',)
+        extra_kwargs = {
+            "price": {"required": True}
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if self.context.get("request").method == "GET":
-            self.fields["user"] = GeneralProfileSerializer(
-                context={"request": self.context.get("request")}
-            )
+        if self.context.get('request').method == 'GET':
+            self.fields['user'] = GeneralProfileSerializer(context={
+                                        'request':self.context.get('request')})
 
     def get_serializer_context(self):
-        context = {"request": self.context.get("request")}
+        context={'request':self.context.get('request')}
         return context
 
     def validate(self, data):
