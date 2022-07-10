@@ -20,6 +20,7 @@ class ListCreateAuctionBid(generics.ListCreateAPIView):
         auction = get_object_or_404(Auction, token=token)
         request.data["user"] = request.user.id
         request.data["auction"] = auction.id
+        request.data["time"] = datetime.datetime.now()
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         bid = serializer.save()
