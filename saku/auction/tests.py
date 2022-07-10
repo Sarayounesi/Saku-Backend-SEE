@@ -5,7 +5,8 @@ from rest_framework.exceptions import ErrorDetail
 from rest_framework.test import APITestCase
 from django.contrib.auth.models import User
 from rest_framework import status
-from auction.models import Auction, Tags, Category, Bid
+from auction.models import Auction, Tags, Category
+form bid.models import Bid
 
 
 # Create your tests here.
