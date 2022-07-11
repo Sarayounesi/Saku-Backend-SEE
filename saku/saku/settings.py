@@ -83,15 +83,15 @@ WSGI_APPLICATION = "saku.wsgi.application"
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql_psycopg2",
-        "NAME": "saku-db",
-        "USER": "postgres",
-        "PASSWORD": "saku1234",
-        "HOST": os.getenv("DB_HOST", "db"),
-        "PORT": "5432",
-    },
-    "local": {"ENGINE": "django.db.backends.sqlite3", "NAME": "./saku.db"},
+    # "default": {
+    #     "ENGINE": "django.db.backends.postgresql_psycopg2",
+    #     "NAME": "saku-db",
+    #     "USER": "postgres",
+    #     "PASSWORD": "saku1234",
+    #     "HOST": os.getenv("DB_HOST", "db"),
+    #     "PORT": "5432",
+    # },
+    "default": {"ENGINE": "django.db.backends.sqlite3", "NAME": "./saku.db"},
 }
 
 if os.environ.get("GITHUB_WORKFLOW", None):
