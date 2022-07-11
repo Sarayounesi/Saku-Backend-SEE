@@ -25,7 +25,8 @@ class GetChat(ListAPIView):
                 c["username"] = usernames[
                     1 - usernames.index(self.request.user.username)
                 ]
-                c["profile_image"] = Profile.objects.get(user__username=c["username"]).profile_image
+                profile = Profile.objects.get(user__username=c["username"])
+                c["profile_image"] = profile.profile_image.url if profile else None
                 chats.append(c)
         return chats
 

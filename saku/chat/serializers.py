@@ -1,12 +1,12 @@
 from rest_framework.serializers import Serializer, CharField, DateTimeField
 
-
 class GetChatSerializer(Serializer):
     username = CharField(required=True)
     created_at = DateTimeField(required=True)
+    profile_image = CharField(allow_null=True)
 
     class Meta:
-        fields = ("created_at", "username")
+        fields = ("created_at", "username", "profile_image")
 
 
 class GetMessageSerializer(Serializer):
