@@ -75,15 +75,15 @@ class GetAuctionRequestSerializer(serializers.ModelSerializer):
         return context
 
     def get_best_bid(self, obj):
-        best_bid = obj.best_bid
-        if best_bid == None:
-            bids = Bid.objects.filter(auction=obj.id).order_by("price")
-            if len(bids) > 0:
-                if obj.mode == 1:
-                    best_bid = bids.last()
-                else:
-                    best_bid = bids.first()
-        if best_bid != None:
+        # best_bid = obj.best_bid
+        # if best_bid == None:
+        bids = Bid.objects.filter(auction=obj.id).order_by("price")
+        if len(bids) > 0:
+            if obj.mode == 1:
+                best_bid = bids.last()
+            else:
+                best_bid = bids.first()
+        # if best_bid != None:
             user_data = GeneralProfileSerializer(
                 best_bid.user, context={"request": self.context.get("request")}
             ).data
