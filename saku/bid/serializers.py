@@ -3,6 +3,7 @@ from rest_framework import serializers
 from user_profile.serializers import GeneralProfileSerializer
 from auction.models import Auction
 from bid.models import Bid
+from django.utils import timezone
 
 
 class BidSerializer(serializers.ModelSerializer):
@@ -26,7 +27,7 @@ class BidSerializer(serializers.ModelSerializer):
     def validate(self, data):
         user = data.get("user")
         price = data.get("price")
-        time = data.get("time")
+        time = timezone.now()
         auction_id = data.get("auction").id
         auction = Auction.objects.get(id=auction_id)
 
