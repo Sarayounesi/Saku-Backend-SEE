@@ -3,6 +3,7 @@ from rest_framework import serializers
 
 class GeneralCreateResponseSerializer(serializers.Serializer):
     message = serializers.CharField(default="Created!", min_length=5)
+    token = serializers.CharField(min_length=8)
 
     class Meta:
         fields = "__all__"

@@ -150,6 +150,11 @@ class GetAuctionTest(APITestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(1, len(response.data))
 
+    def test_get_auction_list_by_limit(self):
+        response = self.client.get(path="/auction/?limit=500")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(0, len(response.data))
+
     def test_get_detailed_auction(self):
         response = self.client.get(path="/auction/qwertyui")
         self.assertEqual(200, response.status_code)

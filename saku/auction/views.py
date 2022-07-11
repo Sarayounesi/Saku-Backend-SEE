@@ -1,15 +1,11 @@
 import os
 from drf_yasg.utils import swagger_auto_schema
-from auction.serializers import (
-    CreateAuctionRequestSerializer,
-    GetAuctionRequestSerializer,
-    GetCategoriesSerializer,
-)
 from rest_framework import generics, status
 from auction.serializers import (
     CreateAuctionRequestSerializer,
     GetAuctionRequestSerializer,
     UpdateAuctionRequestSerializer,
+    GetCategoriesSerializer
 )
 from rest_framework.response import Response
 from saku.serializers import (
@@ -35,7 +31,10 @@ class CreateListAuction(generics.ListCreateAPIView):
         tag_names = request.data.get("tags")
         tags = []
         if tag_names:
-            splited_tags = [x.strip() for x in tag_names.split(',')]
+            try:
+                splited_tags = [x.strip() for x in tag_names.split(',')]
+            except:
+                splited_tags = tags
             for tag in splited_tags:
                 tag_instance, _ = Tags.objects.get_or_create(name=tag)
                 tags.append(tag_instance)
@@ -55,7 +54,7 @@ class CreateListAuction(generics.ListCreateAPIView):
 
             mode = self.request.GET.get('mode')
             if mode:
-                return auctions.filter(mode=mode)
+                return auctions.filter(mode=int(mode))
 
             category = self.request.GET.get('category')
             if category:
@@ -74,7 +73,7 @@ class CreateListAuction(generics.ListCreateAPIView):
 
             limit = self.request.GET.get('limit')
             if limit:
-                return auctions.filter(limit__gta=int(limit))
+                return auctions.filter(limit__gte=int(limit))
 
         return auctions
 
@@ -100,7 +99,7 @@ class CreateListAuction(generics.ListCreateAPIView):
         if response.status_code != 201:
             return super().finalize_response(request, response, args, kwargs)
         response = GeneralCreateResponseSerializer(
-            data={"status_code": 201, "message": "Created!"}
+            data={"status_code": 201, "message": "Created!", "token": Auction.objects.get(id=response.data["id"]).token}
         )
         if response.is_valid():
             return super().finalize_response(
