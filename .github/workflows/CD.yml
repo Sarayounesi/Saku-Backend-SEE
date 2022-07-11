@@ -21,4 +21,4 @@ jobs:
       - name: Deploy
         shell: bash
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && export TAG=${{ env.RELEASE_VERSION }} && docker-compose -f docker-compose.deploy.yml down && docker-compose -f docker-compose.deploy.yml up -d"
+          ssh -o StrictHostKeyChecking=no ubuntu@188.121.110.151 "cd Saku-Backend && docker-compose -f docker-compose.deploy.yml down && docker-compose -f docker-compose.deploy.yml up -d"

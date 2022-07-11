@@ -19,7 +19,7 @@ services:
       - "16379:6379"
 
   web:
-    image: "ghcr.io/mehdi-mostafavi/saku:${TAG}"
+    image: "ghcr.io/mehdi-mostafavi/saku:latest"
     command: /bin/sh -c "cd saku && python manage.py makemigrations && python manage.py migrate && python manage.py runserver 0.0.0.0:8888"
     ports:
       - "8888:8888"
