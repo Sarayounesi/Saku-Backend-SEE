@@ -77,6 +77,7 @@ class CreateAuctionTest(APITestCase):
         tags = [Tags.objects.create(name="T1"), Tags.objects.create(name="T2")]
         auction = Auction.objects.create(
             **{
+                "id" : 1,
                 "created_at": "2019-08-24T14:15:22Z",
                 "name": "auction1",
                 "finished_at": datetime.datetime.now() + datetime.timedelta(0,10),
@@ -91,7 +92,7 @@ class CreateAuctionTest(APITestCase):
         Bid.objects.create(
             user=self.user2,
             price=500,
-            auction=auction,
+            auction=1,
             time="2022-07-24T14:15:22Z",
         )
         time.sleep(40)
