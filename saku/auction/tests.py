@@ -72,30 +72,32 @@ class CreateAuctionTest(APITestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(1, len(response.data[0]))
 
-    # def test_auction_best_bid(self):
-    #     category = Category.objects.create(name="Category")
-    #     tags = [Tags.objects.create(name="T1"), Tags.objects.create(name="T2")]
-    #     auction = Auction.objects.create(
-    #         **{"created_at": "2019-08-24T14:15:22Z",
-    #             "name": "auction1",
-    #             "finished_at": datetime.datetime.now() + datetime.timedelta(0,10),
-    #             "mode": 1,
-    #             "limit": 0,
-    #             "is_private": False,
-    #             "user": self.user,
-    #             "token": "qwertyui",
-    #             "category": category,
-    #         }
-    #     ).tags.set(tags)
-    #     Bid.objects.create(
-    #         user=self.user2,
-    #         price=500,
-    #         auction=auction,
-    #         time="2022-07-24T14:15:22Z",
-    #     )
-    #     time.sleep(40)
-    #     response = self.client.get(path="/auction/qwertyui")
-    #     self.assertEqual(500, response.data["best_bid"]["price"])
+    def test_auction_best_bid(self):
+        category = Category.objects.create(name="Category")
+        tags = [Tags.objects.create(name="T1"), Tags.objects.create(name="T2")]
+        auction = Auction.objects.create(
+            **{"id": 5,
+                "created_at": "2019-08-24T14:15:22Z",
+               "name": "auction1",
+               "finished_at": datetime.datetime.now() + datetime.timedelta(0, 10),
+               "mode": 1,
+               "limit": 0,
+               "is_private": False,
+               "user": self.user,
+               "token": "qwertyui",
+               "category": category,
+               }
+        )
+        auction.tags.set(tags)
+        Bid.objects.create(
+            user=self.user2,
+            price=500,
+            auction=auction,
+            time="2022-07-24T14:15:22Z",
+        )
+        time.sleep(40)
+        response = self.client.get(path="/auction/qwertyui")
+        self.assertEqual(500, response.data["best_bid"]["price"])
 
 
 class GetAuctionTest(APITestCase):
@@ -137,6 +139,16 @@ class GetAuctionTest(APITestCase):
         self.assertEqual(200, response.status_code)
         self.assertEqual(2, len(response.data))
         self.assertEqual("auction2", response.data[0]["name"])
+
+    def test_get_auction_list_by_name(self):
+        response = self.client.get(path="/auction/?name=auc")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(2, len(response.data))
+
+    def test_get_auction_list_by_finished(self):
+        response = self.client.get(path="/auction/?finished=false")
+        self.assertEqual(200, response.status_code)
+        self.assertEqual(1, len(response.data))
 
     def test_get_detailed_auction(self):
         response = self.client.get(path="/auction/qwertyui")
