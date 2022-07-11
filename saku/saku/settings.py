@@ -20,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "django-insecure-fhk79x(^a9w%v!zm!6%iho2(^rv&q8s^x!cm)(3q*gsl^r7^@="
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv("DEBUG", "True").lower() == "true"
+DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 CORS_ORIGIN_ALLOW_ALL = True
@@ -170,7 +170,8 @@ MEDIA_URL = "/media/"
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -184,7 +185,6 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = "saku.project.app@gmail.com"
 EMAIL_HOST_PASSWORD = "dgsprywrqcwvhmel"
 
-
 # CELERY
 CELERY_BROKER_URL = "redis://redis:6379"
 # CELERY_RESULT_BACKEND = 'redis://localhost:6379'
@@ -193,7 +193,6 @@ CELERY_BROKER_URL = "redis://redis:6379"
 # CELERY_RESULT_SERIALIZER = 'json'
 # CELERY_TIMEZONE = 'Asia/Tehran'
 CELERY_TIMEZONE = "UTC"
-
 
 CHANNEL_LAYERS = {"default": {"BACKEND": "channels.layers.InMemoryChannelLayer"}}
 ASGI_APPLICATION = "saku.asgi.application"
