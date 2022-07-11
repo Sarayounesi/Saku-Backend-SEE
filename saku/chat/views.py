@@ -1,6 +1,6 @@
 from rest_framework.generics import ListAPIView
 from chat.models import Chat, Message
-
+from user_profile.models import Profile
 # Create your views here.
 from rest_framework.permissions import IsAuthenticated
 from chat.serializers import GetChatSerializer, GetMessageSerializer
@@ -25,6 +25,7 @@ class GetChat(ListAPIView):
                 c["username"] = usernames[
                     1 - usernames.index(self.request.user.username)
                 ]
+                c["profile_image"] = Profile.objects.get(user__username=c["username"]).profile_image
                 chats.append(c)
         return chats
 
