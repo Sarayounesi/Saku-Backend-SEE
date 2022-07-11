@@ -17,12 +17,14 @@ from saku.serializers import (
     GeneralErrorResponseSerializer,
 )
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.parsers import MultiPartParser
 from auction.models import Auction, Category, Tags
 from datetime import datetime
 
 
 class CreateListAuction(generics.ListCreateAPIView):
     permission_classes = (IsAuthenticated,)
+    parser_classes = [MultiPartParser]
     queryset = Auction.objects.order_by("finished_at")
 
     @swagger_auto_schema(
